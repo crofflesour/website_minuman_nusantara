@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendahuluan — Teh Pucuk Harum</title>
+    <meta name="description" content="Sejarah, galeri foto, dan cara pembuatan Teh Pucuk Harum — teh premium terbaik Indonesia.">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Variables ─── */
+        :root {
+            --bg:         #06050C;
+            --bg-card:    #0C0A16;
+            --bg-hover:   #120F1E;
+            --p-deep:     #170E2A;
+            --p-mid:      #3A2860;
+            --p-light:    #6040A0;
+            --heather:    #9B7EC8;
+            --heather-lt: #C4ADE8;
+            --heather-dm: #5C4888;
+            --sage:       #5A8C70;
+            --gold:       #BF9F58;
+            --text:       #EDE8F5;
+            --text-mid:   #9A96B0;
+            --text-dim:   #46425A;
+            --line:       rgba(155,126,200,.13);
+            --line-sage:  rgba(90,140,112,.1);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width:3px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--p-mid); border-radius:2px; }
+
+        /* Grain overlay */
+        body::after {
+            content:'';
+            position:fixed; inset:0;
+            pointer-events:none; z-index:9999;
+            opacity:.028;
+            background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size:180px;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position:fixed; inset:0 0 auto 0; z-index:500;
+            display:flex; justify-content:space-between; align-items:center;
+            padding:28px 64px;
+            transition: padding .35s, background .35s, border-color .35s;
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            padding:16px 64px;
+            background: rgba(6,5,12,.93);
+            backdrop-filter: blur(20px);
+            border-color: var(--line);
+        }
+        .logo {
+            font-family:'Cormorant Garamond',serif;
+            font-size:17px; font-weight:600;
+            letter-spacing:3px; text-decoration:none;
+            color:var(--text); text-transform:uppercase;
+        }
+        .logo em { font-style:normal; color:var(--heather); }
+
+        .nav-links { display:flex; gap:42px; list-style:none; }
+        .nav-links a {
+            font-size:11px; letter-spacing:2.5px; text-transform:uppercase;
+            color:var(--text-mid); text-decoration:none;
+            position:relative; transition:color .3s;
+        }
+        .nav-links a::after {
+            content:''; position:absolute;
+            bottom:-5px; left:0; width:0; height:1px;
+            background:var(--heather); transition:width .3s;
+        }
+        .nav-links a:hover { color:var(--text); }
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width:100%; }
+        .nav-links a.active { color:var(--heather); }
+
+        .hamburger {
+            display:none; flex-direction:column;
+            gap:6px; cursor:pointer; padding:4px;
+        }
+        .hamburger span {
+            display:block; width:22px; height:1px;
+            background:var(--text); transition:all .3s;
+        }
+        .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+        .hamburger.open span:nth-child(2) { opacity:0; }
+        .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display:none; position:fixed;
+            inset:0; z-index:499;
+            background:rgba(6,5,12,.97);
+            flex-direction:column;
+            justify-content:center; align-items:center; gap:40px;
+        }
+        .mobile-menu.open { display:flex; }
+        .mobile-menu a {
+            font-family:'Cormorant Garamond',serif;
+            font-size:34px; font-weight:300;
+            color:var(--text-mid); text-decoration:none;
+            letter-spacing:2px; transition:color .3s;
+        }
+        .mobile-menu a:hover { color:var(--heather); }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height:100vh;
+            display:flex; flex-direction:column; justify-content:flex-end;
+            padding: 0 64px 100px;
+            position:relative; overflow:hidden;
+        }
+
+        /* Diagonal clip top */
+        .hero::before {
+            content:'';
+            position:absolute; inset:0;
+            background: linear-gradient(135deg,
+                rgba(58,40,96,.22) 0%,
+                transparent 55%,
+                rgba(23,14,42,.3) 100%);
+            pointer-events:none;
+        }
+
+        /* Top half huge number */
+        .hero-bg-num {
+            position:absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-58%);
+            font-family:'Cormorant Garamond',serif;
+            font-size: clamp(280px, 35vw, 480px);
+            font-weight:300; font-style:italic;
+            color: rgba(155,126,200,.04);
+            line-height:1; pointer-events:none;
+            user-select:none; white-space:nowrap;
+            letter-spacing:-20px;
+        }
+
+        /* Glow orbs */
+        .orb {
+            position:absolute; border-radius:50%;
+            pointer-events:none; filter:blur(90px);
+        }
+        .orb-1 {
+            width:600px; height:600px;
+            top:-100px; right:-150px;
+            background:radial-gradient(circle, rgba(96,64,160,.18) 0%, transparent 70%);
+        }
+        .orb-2 {
+            width:400px; height:400px;
+            bottom:-80px; left:-80px;
+            background:radial-gradient(circle, rgba(58,40,96,.2) 0%, transparent 70%);
+        }
+        .orb-3 {
+            width:300px; height:300px;
+            top:30%; left:40%;
+            background:radial-gradient(circle, rgba(90,140,112,.08) 0%, transparent 70%);
+        }
+
+        /* Geometric accent top-right */
+        .hero-geo {
+            position:absolute;
+            top:80px; right:64px;
+            width:340px; height:340px;
+            pointer-events:none;
+        }
+
+        .hero-eyebrow {
+            font-size:10px; letter-spacing:5px;
+            text-transform:uppercase; color:var(--heather);
+            display:flex; align-items:center; gap:16px;
+            opacity:0; animation: fadeUp .8s ease forwards .3s;
+            position:relative; z-index:1;
+        }
+        .hero-eyebrow::before {
+            content:''; display:block;
+            width:36px; height:1px; background:var(--heather);
+        }
+
+        .hero-h1 {
+            font-family:'Cormorant Garamond',serif;
+            font-size: clamp(64px, 10vw, 130px);
+            font-weight:300; line-height:.9;
+            letter-spacing:-4px; margin-top:24px;
+            max-width:900px;
+            opacity:0; animation: fadeUp 1s ease forwards .5s;
+            position:relative; z-index:1;
+        }
+        .hero-h1 em { font-style:italic; color:var(--heather-lt); }
+        .hero-h1 .gold { color:var(--gold); }
+
+        .hero-desc {
+            font-size:14px; color:var(--text-mid);
+            line-height:1.9; max-width:420px;
+            margin-top:28px;
+            opacity:0; animation: fadeUp 1s ease forwards .7s;
+            position:relative; z-index:1;
+        }
+
+        /* Page nav pills */
+        .hero-pills {
+            display:flex; gap:12px; flex-wrap:wrap;
+            margin-top:40px;
+            opacity:0; animation: fadeUp 1s ease forwards .9s;
+            position:relative; z-index:1;
+        }
+        .pill {
+            display:inline-flex; align-items:center; gap:8px;
+            padding:9px 20px;
+            border:1px solid var(--line);
+            font-size:11px; letter-spacing:2px;
+            text-transform:uppercase; color:var(--text-mid);
+            text-decoration:none;
+            transition: all .3s ease;
+            cursor:pointer; background:transparent;
+        }
+        .pill:hover, .pill.active-pill {
+            border-color:var(--heather);
+            color:var(--heather);
+            background: rgba(155,126,200,.06);
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position:absolute; bottom:36px; right:64px;
+            display:flex; flex-direction:column;
+            align-items:center; gap:10px;
+            opacity:0; animation: fadeIn 1s ease forwards 1.6s;
+        }
+        .scroll-hint span {
+            font-size:8px; letter-spacing:3px;
+            text-transform:uppercase; color:var(--text-dim);
+            writing-mode:vertical-rl;
+        }
+        .scroll-line {
+            width:1px; height:56px;
+            background:linear-gradient(to bottom, transparent, var(--heather));
+            animation: pulse 2s ease infinite;
+        }
+
+        /* ─── Divider ─── */
+        .divider {
+            width:100%; height:1px;
+            background:linear-gradient(to right, transparent, var(--line), transparent);
+        }
+
+        /* ─── SECTION BASE ─── */
+        .section {
+            padding: 120px 64px;
+            position:relative;
+        }
+
+        .s-label {
+            font-size:10px; letter-spacing:4px;
+            text-transform:uppercase; color:var(--heather);
+            display:flex; align-items:center; gap:14px;
+            margin-bottom:20px;
+        }
+        .s-label::before {
+            content:''; width:30px; height:1px; background:var(--heather);
+        }
+
+        .s-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size: clamp(38px, 5vw, 68px);
+            font-weight:300; line-height:1.05;
+            letter-spacing:-2px; margin-bottom:16px;
+        }
+        .s-title em { font-style:italic; color:var(--heather-lt); }
+        .s-title .g { color:var(--gold); }
+
+        .s-sub {
+            font-size:14px; color:var(--text-mid);
+            line-height:1.9; max-width:540px;
+        }
+
+        /* ─── SEJARAH / TIMELINE ─── */
+        .timeline-wrap {
+            margin-top:72px;
+            position:relative;
+        }
+
+        /* Vertical line */
+        .timeline-wrap::before {
+            content:''; position:absolute;
+            left:50%; top:0; bottom:0;
+            width:1px;
+            background:linear-gradient(to bottom, transparent, var(--line) 10%, var(--line) 90%, transparent);
+            transform:translateX(-50%);
+        }
+
+        .tl-item {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:0; margin-bottom:64px;
+            position:relative;
+        }
+        .tl-item:last-child { margin-bottom:0; }
+
+        /* Dot on timeline */
+        .tl-item::before {
+            content:''; position:absolute;
+            left:50%; top:36px;
+            width:10px; height:10px;
+            background:var(--heather);
+            border-radius:50%;
+            transform:translate(-50%,-50%);
+            box-shadow:0 0 20px rgba(155,126,200,.4);
+        }
+
+        /* Alternating: even items flip */
+        .tl-item.right .tl-content { grid-column:2; }
+        .tl-item.right .tl-year { grid-column:1; grid-row:1; text-align:right; padding-right:40px; }
+        .tl-item.left .tl-content { grid-column:1; text-align:right; padding-right:40px; }
+        .tl-item.left .tl-year { grid-column:2; grid-row:1; padding-left:40px; }
+
+        .tl-year {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(52px,7vw,90px);
+            font-weight:300; line-height:1;
+            color:rgba(155,126,200,.18);
+            align-self:start; padding-top:8px;
+        }
+
+        .tl-content {
+            padding-left:40px; align-self:center;
+        }
+        .tl-item.left .tl-content { padding-left:0; }
+
+        .tl-tag {
+            font-size:9px; letter-spacing:3px;
+            text-transform:uppercase; color:var(--heather);
+            margin-bottom:10px;
+        }
+
+        .tl-heading {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(22px,2.5vw,32px);
+            font-weight:400; margin-bottom:12px;
+            line-height:1.2;
+        }
+
+        .tl-text {
+            font-size:13.5px; color:var(--text-mid);
+            line-height:1.85;
+        }
+
+        .tl-badge {
+            display:inline-block;
+            margin-top:16px;
+            padding:6px 14px;
+            border:1px solid var(--line);
+            font-size:10px; letter-spacing:2px;
+            text-transform:uppercase; color:var(--heather-dm);
+        }
+
+        /* ─── GALLERY ─── */
+        .gallery-section { background:var(--bg); }
+
+        .gallery-grid {
+            margin-top:64px;
+            display:grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap:12px;
+        }
+
+        /* Each photo card */
+        .g-card {
+            background:var(--bg-card);
+            border:1px solid var(--line);
+            overflow:hidden;
+            position:relative;
+            cursor:pointer;
+        }
+        .g-card::before {
+            content:'';
+            position:absolute; inset:0;
+            background:rgba(155,126,200,.06);
+            opacity:0; transition:opacity .4s;
+            z-index:2;
+        }
+        .g-card:hover::before { opacity:1; }
+
+        /* CSS "photo" art inside each card */
+        .g-art {
+            width:100%; padding-bottom:100%;
+            position:relative; overflow:hidden;
+        }
+        .g-art-inner {
+            position:absolute; inset:0;
+            display:flex; align-items:center; justify-content:center;
+            transition:transform .6s ease;
+        }
+        .g-card:hover .g-art-inner { transform:scale(1.05); }
+
+        /* Unique art for each card */
+        .art-1 { background:linear-gradient(135deg, #0E1A12 0%, #1C3A26 40%, #0A2E18 100%); }
+        .art-2 { background:linear-gradient(160deg, #0A0F18 0%, #1A2840 50%, #0C1A30 100%); }
+        .art-3 { background:linear-gradient(110deg, #140E20 0%, #2A1848 50%, #180E30 100%); }
+        .art-4 { background:linear-gradient(145deg, #0E1A14 0%, #243E2C 60%, #112614 100%); }
+        .art-5 { background:linear-gradient(130deg, #100D1A 0%, #261848 50%, #140E28 100%); }
+        .art-6 { background:linear-gradient(155deg, #0C180E 0%, #1E3A22 50%, #0A1C0C 100%); }
+
+        .g-card-overlay {
+            position:absolute; bottom:0; left:0; right:0;
+            padding:20px 18px;
+            background:linear-gradient(to top, rgba(6,5,12,.9) 0%, transparent 100%);
+            z-index:3; transform:translateY(8px);
+            opacity:0; transition:all .35s ease;
+        }
+        .g-card:hover .g-card-overlay { opacity:1; transform:translateY(0); }
+
+        .g-card-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size:16px; font-weight:400;
+            margin-bottom:4px;
+        }
+        .g-card-sub {
+            font-size:10px; letter-spacing:2px;
+            text-transform:uppercase; color:var(--heather);
+        }
+
+        /* Grid placement */
+        .g-1 { grid-column: 1/6;  grid-row:1; }
+        .g-2 { grid-column: 6/9;  grid-row:1; }
+        .g-3 { grid-column: 9/13; grid-row:1; }
+        .g-4 { grid-column: 1/4;  grid-row:2; }
+        .g-5 { grid-column: 4/9;  grid-row:2; }
+        .g-6 { grid-column: 9/13; grid-row:2; }
+
+        /* Art for tall cards */
+        .g-1 .g-art,
+        .g-5 .g-art { padding-bottom:65%; }
+        .g-2 .g-art,
+        .g-3 .g-art,
+        .g-4 .g-art,
+        .g-6 .g-art { padding-bottom:85%; }
+
+        /* SVG decorations inside each art card */
+        .leaf-svg { color:rgba(90,140,112,.25); }
+        .bottle-svg { color:rgba(155,126,200,.2); }
+        .drop-svg { color:rgba(191,159,88,.18); }
+
+        /* ─── CARA PEMBUATAN ─── */
+        .process-section { position:relative; overflow:hidden; }
+
+        .process-section::before {
+            content:'';
+            position:absolute; inset:0;
+            background:radial-gradient(ellipse 80% 60% at 30% 50%, rgba(58,40,96,.12) 0%, transparent 70%);
+        }
+
+        .steps-wrap {
+            margin-top:72px;
+            position:relative;
+        }
+
+        /* Horizontal connector line */
+        .steps-connector {
+            position:absolute;
+            top:48px; left:0; right:0;
+            height:1px;
+            background:linear-gradient(to right, transparent 4%, var(--line) 10%, var(--line) 90%, transparent 96%);
+        }
+
+        .steps-grid {
+            display:grid;
+            grid-template-columns:repeat(5,1fr);
+            gap:0;
+            position:relative; z-index:1;
+        }
+
+        .step {
+            padding:0 24px;
+            position:relative; text-align:center;
+            transition:transform .3s ease;
+        }
+        .step:hover { transform:translateY(-8px); }
+        .step:first-child { padding-left:0; }
+        .step:last-child  { padding-right:0; }
+
+        .step-dot {
+            width:96px; height:96px;
+            border-radius:50%;
+            border:1px solid var(--line);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 28px;
+            background:var(--bg-card);
+            position:relative;
+            transition:border-color .3s, box-shadow .3s;
+        }
+        .step:hover .step-dot {
+            border-color:var(--heather);
+            box-shadow:0 0 30px rgba(155,126,200,.15);
+        }
+
+        /* Step number badge */
+        .step-dot::before {
+            content:attr(data-n);
+            position:absolute;
+            top:-12px; right:-8px;
+            width:24px; height:24px;
+            background:var(--p-mid);
+            border-radius:50%;
+            font-size:9px; font-weight:500;
+            letter-spacing:0;
+            display:flex; align-items:center; justify-content:center;
+            color:var(--heather-lt);
+        }
+
+        .step-icon { font-size:30px; }
+
+        .step-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size:20px; font-weight:400;
+            margin-bottom:10px; line-height:1.2;
+        }
+
+        .step-desc {
+            font-size:12px; color:var(--text-mid);
+            line-height:1.8;
+        }
+
+        .step-tag {
+            display:inline-block;
+            margin-top:14px;
+            padding:4px 12px;
+            border:1px solid var(--line);
+            font-size:9px; letter-spacing:2px;
+            text-transform:uppercase; color:var(--text-dim);
+        }
+
+        /* ─── CLOSING BANNER ─── */
+        .closing {
+            padding:100px 64px;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:80px; align-items:center;
+            position:relative; overflow:hidden;
+        }
+        .closing::before {
+            content:'';
+            position:absolute; inset:0;
+            background:linear-gradient(135deg, rgba(23,14,42,.5) 0%, transparent 60%);
+        }
+
+        .closing-quote {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(30px,4vw,52px);
+            font-weight:300; font-style:italic;
+            line-height:1.35;
+            position:relative; z-index:1;
+        }
+        .closing-quote em { font-style:normal; color:var(--heather-lt); }
+
+        .closing-right { position:relative; z-index:1; }
+        .closing-attr {
+            font-size:10px; letter-spacing:3px;
+            text-transform:uppercase; color:var(--heather);
+            margin-bottom:20px;
+        }
+        .closing-body {
+            font-size:14px; color:var(--text-mid);
+            line-height:1.9; margin-bottom:32px;
+        }
+
+        .btn {
+            display:inline-flex; align-items:center;
+            gap:10px; text-decoration:none;
+            font-size:11px; letter-spacing:2.5px;
+            text-transform:uppercase; font-weight:500;
+            transition:all .3s ease;
+        }
+        .btn-filled {
+            padding:13px 32px;
+            background:var(--p-mid); color:var(--text);
+            border:1px solid rgba(155,126,200,.3);
+            position:relative; overflow:hidden;
+        }
+        .btn-filled::before {
+            content:''; position:absolute; inset:0;
+            background:var(--heather-dm);
+            transform:translateX(-100%); transition:transform .35s ease;
+        }
+        .btn-filled:hover::before { transform:translateX(0); }
+        .btn-filled span { position:relative; z-index:1; }
+        .btn-ghost { color:var(--text-mid); margin-left:20px; }
+        .btn-ghost:hover { color:var(--heather); }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding:44px 64px;
+            border-top:1px solid var(--line);
+            display:flex; justify-content:space-between;
+            align-items:center; flex-wrap:wrap; gap:20px;
+        }
+        .f-logo {
+            font-family:'Cormorant Garamond',serif;
+            font-size:16px; letter-spacing:3px; color:var(--text-mid);
+        }
+        .f-logo em { font-style:normal; color:var(--heather); }
+        .f-copy { font-size:11px; color:var(--text-dim); }
+        .f-links { display:flex; gap:28px; }
+        .f-links a {
+            font-size:10px; letter-spacing:2px;
+            text-transform:uppercase; color:var(--text-dim);
+            text-decoration:none; transition:color .3s;
+        }
+        .f-links a:hover { color:var(--heather); }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(32px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity:0; }
+            to   { opacity:1; }
+        }
+        @keyframes pulse {
+            0%,100% { opacity:.3; transform:scaleY(.8); }
+            50%      { opacity:1; transform:scaleY(1); }
+        }
+
+        .reveal {
+            opacity:0; transform:translateY(38px);
+            transition: opacity .85s ease, transform .85s ease;
+        }
+        .reveal.d2 { transition-delay:.1s; }
+        .reveal.d3 { transition-delay:.2s; }
+        .reveal.d4 { transition-delay:.3s; }
+        .reveal.d5 { transition-delay:.4s; }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width:1100px) {
+            .timeline-wrap::before { display:none; }
+            .tl-item { grid-template-columns:1fr; gap:16px; }
+            .tl-item.right .tl-content,
+            .tl-item.left  .tl-content { grid-column:1; text-align:left; padding:0; }
+            .tl-item.right .tl-year,
+            .tl-item.left  .tl-year    { grid-column:1; text-align:left; padding:0; }
+            .tl-item::before { display:none; }
+
+            .gallery-grid { grid-template-columns:repeat(2,1fr); }
+            .g-1,.g-2,.g-3,.g-4,.g-5,.g-6 { grid-column:auto; grid-row:auto; }
+            .g-1 .g-art,.g-5 .g-art,
+            .g-2 .g-art,.g-3 .g-art,
+            .g-4 .g-art,.g-6 .g-art { padding-bottom:75%; }
+
+            .steps-grid { grid-template-columns:repeat(3,1fr); gap:40px; }
+            .steps-connector { display:none; }
+
+            .closing { grid-template-columns:1fr; gap:40px; }
+        }
+        @media (max-width:768px) {
+            nav { padding:20px 24px; }
+            nav.scrolled { padding:14px 24px; }
+            .nav-links { display:none !important; }
+            .hamburger { display:flex; }
+
+            .hero { padding:0 24px 80px; }
+            .scroll-hint { right:24px; }
+            .section { padding:80px 24px; }
+            .closing { padding:80px 24px; }
+            footer { padding:36px 24px; flex-direction:column; text-align:center; }
+            .f-links { flex-wrap:wrap; justify-content:center; }
+
+            .steps-grid { grid-template-columns:1fr 1fr; gap:32px; }
+            .gallery-grid { grid-template-columns:1fr; }
+        }
+        @media (max-width:480px) {
+            .steps-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a>
+    <a href="pendahuluan.html" onclick="closeMenu()">Pendahuluan</a>
+    <a href="informasi.html" onclick="closeMenu()">Informasi</a>
+    <a href="map.html" onclick="closeMenu()">Lokasi</a>
+    <a href="infopembuat.html" onclick="closeMenu()">Pembuat</a>
+</div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="navbar">
+    <a href="index.html" class="logo">Teh <em>Pucuk</em> Harum</a>
+    <ul class="nav-links">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="pendahuluan.html" class="active">Pendahuluan</a></li>
+        <li><a href="informasi.html">Informasi</a></li>
+        <li><a href="map.html">Lokasi</a></li>
+        <li><a href="infopembuat.html">Pembuat</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-bg-num">01</div>
+
+    <!-- Geometric SVG top right -->
+    <svg class="hero-geo" viewBox="0 0 340 340" fill="none">
+        <circle cx="170" cy="170" r="160" stroke="rgba(155,126,200,.07)" stroke-width="1"/>
+        <circle cx="170" cy="170" r="120" stroke="rgba(155,126,200,.05)" stroke-width="1"/>
+        <circle cx="170" cy="170" r="80"  stroke="rgba(155,126,200,.08)" stroke-width="1"/>
+        <line x1="10"  y1="170" x2="330" y2="170" stroke="rgba(155,126,200,.04)" stroke-width="1"/>
+        <line x1="170" y1="10"  x2="170" y2="330" stroke="rgba(155,126,200,.04)" stroke-width="1"/>
+        <line x1="57"  y1="57"  x2="283" y2="283" stroke="rgba(155,126,200,.04)" stroke-width="1"/>
+        <line x1="283" y1="57"  x2="57"  y2="283" stroke="rgba(155,126,200,.04)" stroke-width="1"/>
+        <!-- Leaf silhouette center -->
+        <ellipse cx="170" cy="170" rx="32" ry="55" stroke="rgba(90,140,112,.15)" stroke-width="1" fill="none"/>
+        <line x1="170" y1="115" x2="170" y2="225" stroke="rgba(90,140,112,.12)" stroke-width="1"/>
+    </svg>
+
+    <div class="hero-eyebrow">Halaman 01 — Pendahuluan</div>
+
+    <h1 class="hero-h1">
+        Mengenal<br>
+        <em>Lebih Dalam</em><br>
+        Teh <span class="gold">Pucuk.</span>
+    </h1>
+
+    <p class="hero-desc">
+        Sejarah panjang, foto-foto produk autentik, dan proses
+        pembuatan teh pucuk pilihan yang menghadirkan cita rasa
+        terbaik dari alam Indonesia.
+    </p>
+
+    <div class="hero-pills">
+        <a href="#sejarah" class="pill active-pill">⏱ Sejarah</a>
+        <a href="#gallery" class="pill">📷 Foto Produk</a>
+        <a href="#proses" class="pill">⚙ Cara Pembuatan</a>
+    </div>
+
+    <div class="scroll-hint">
+        <span>Gulir</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SEJARAH ═══ -->
+<section class="section" id="sejarah">
+    <div class="reveal">
+        <div class="s-label">Sejarah Kami</div>
+        <h2 class="s-title">
+            Perjalanan<br>
+            <em>Panjang</em> Menuju<br>
+            <span class="g">Kesempurnaan</span>
+        </h2>
+        <p class="s-sub">
+            Dari kebun teh terbaik di Indonesia, Teh Pucuk Harum lahir
+            sebagai simbol kualitas dan inovasi dalam industri minuman teh nasional.
+        </p>
+    </div>
+
+    <div class="timeline-wrap">
+
+        <div class="tl-item right reveal">
+            <div class="tl-year">2010</div>
+            <div class="tl-content">
+                <div class="tl-tag">— Awal Mula</div>
+                <div class="tl-heading">Riset & Pengembangan</div>
+                <p class="tl-text">
+                    Mayora Group memulai riset intensif untuk menciptakan
+                    minuman teh siap minum berkualitas premium. Tim ahli
+                    melakukan penelitian mendalam tentang pucuk daun teh
+                    dan kandungan antioksidannya.
+                </p>
+                <div class="tl-badge">R&D Phase</div>
+            </div>
+        </div>
+
+        <div class="tl-item left reveal">
+            <div class="tl-content">
+                <div class="tl-tag">— Peluncuran</div>
+                <div class="tl-heading">Lahirnya Teh Pucuk Harum</div>
+                <p class="tl-text">
+                    Tahun 2011, Teh Pucuk Harum resmi diluncurkan ke pasar
+                    Indonesia. Dengan tagline "Rasa teh sesungguhnya ada di
+                    pucuknya", produk ini langsung mendapat sambutan luar biasa
+                    dari konsumen.
+                </p>
+                <div class="tl-badge">Launched 2011</div>
+            </div>
+            <div class="tl-year">2011</div>
+        </div>
+
+        <div class="tl-item right reveal">
+            <div class="tl-year">2015</div>
+            <div class="tl-content">
+                <div class="tl-tag">— Ekspansi</div>
+                <div class="tl-heading">Pemimpin Pasar Nasional</div>
+                <p class="tl-text">
+                    Hanya dalam 4 tahun, Teh Pucuk Harum berhasil menembus
+                    posisi pemimpin pasar teh botol di Indonesia, menggeser
+                    merek-merek lama yang telah berdiri puluhan tahun.
+                </p>
+                <div class="tl-badge">Market Leader</div>
+            </div>
+        </div>
+
+        <div class="tl-item left reveal">
+            <div class="tl-content">
+                <div class="tl-tag">— Inovasi</div>
+                <div class="tl-heading">Ekspansi Varian Produk</div>
+                <p class="tl-text">
+                    Teh Pucuk Harum meluncurkan berbagai varian baru seperti
+                    Teh Pucuk Less Sugar, Teh Pucuk Jasmine, dan berbagai ukuran
+                    kemasan untuk memenuhi kebutuhan konsumen yang beragam.
+                </p>
+                <div class="tl-badge">7 Varian</div>
+            </div>
+            <div class="tl-year">2019</div>
+        </div>
+
+        <div class="tl-item right reveal">
+            <div class="tl-year">2024</div>
+            <div class="tl-content">
+                <div class="tl-tag">— Kini</div>
+                <div class="tl-heading">13 Tahun Berdiri, Tetap Terdepan</div>
+                <p class="tl-text">
+                    Hingga kini, Teh Pucuk Harum tetap menjadi pilihan utama
+                    jutaan konsumen Indonesia. Komitmen terhadap kualitas
+                    pucuk teh pilihan tidak pernah berubah sejak awal.
+                </p>
+                <div class="tl-badge">Still #1</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ GALLERY ═══ -->
+<section class="section gallery-section" id="gallery">
+    <div class="reveal">
+        <div class="s-label">Galeri Produk</div>
+        <h2 class="s-title">
+            Foto — <em>Foto</em><br>
+            Produk Kami
+        </h2>
+        <p class="s-sub">
+            Keindahan alam dan kualitas terbaik yang tersimpan
+            dalam setiap botol Teh Pucuk Harum.
+        </p>
+    </div>
+
+    <div class="gallery-grid reveal">
+
+        <!-- Card 1 — large landscape -->
+        <div class="g-card g-1">
+            <div class="g-art art-1">
+                <div class="g-art-inner">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none" opacity=".5">
+                        <!-- Tea plantation rows -->
+                        <ellipse cx="80" cy="80" rx="55" ry="85" stroke="#5A8C70" stroke-width="1"/>
+                        <ellipse cx="80" cy="80" rx="35" ry="62" stroke="#5A8C70" stroke-width=".8"/>
+                        <line x1="80" y1="0" x2="80" y2="160" stroke="#5A8C70" stroke-width=".6"/>
+                        <path d="M40 50 Q80 70 120 50" stroke="#5A8C70" stroke-width=".6" fill="none"/>
+                        <path d="M30 80 Q80 95 130 80" stroke="#5A8C70" stroke-width=".6" fill="none"/>
+                        <path d="M40 110 Q80 122 120 110" stroke="#5A8C70" stroke-width=".6" fill="none"/>
+                        <!-- Pucuk (tip) -->
+                        <circle cx="80" cy="30" r="8" stroke="#9B7EC8" stroke-width="1" fill="none"/>
+                        <circle cx="80" cy="30" r="3" fill="#9B7EC8" opacity=".5"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Kebun Teh Pilihan</div>
+                <div class="g-card-sub">Dataran Tinggi Indonesia</div>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="g-card g-2">
+            <div class="g-art art-2">
+                <div class="g-art-inner">
+                    <svg width="100" height="130" viewBox="0 0 100 130" fill="none" opacity=".5">
+                        <!-- Bottle silhouette -->
+                        <path d="M35 30 L35 10 L65 10 L65 30 Q75 40 75 55 L75 110 Q75 120 65 120 L35 120 Q25 120 25 110 L25 55 Q25 40 35 30Z"
+                              stroke="#9B7EC8" stroke-width="1" fill="none"/>
+                        <line x1="25" y1="70" x2="75" y2="70" stroke="#9B7EC8" stroke-width=".6"/>
+                        <!-- Label area -->
+                        <rect x="30" y="75" width="40" height="30" rx="2" stroke="#BF9F58" stroke-width=".8" fill="none"/>
+                        <line x1="35" y1="82" x2="65" y2="82" stroke="#BF9F58" stroke-width=".5"/>
+                        <line x1="35" y1="88" x2="55" y2="88" stroke="#BF9F58" stroke-width=".5"/>
+                        <!-- Cap -->
+                        <rect x="38" y="6" width="24" height="6" rx="2" stroke="#5A8C70" stroke-width=".8" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Kemasan Premium</div>
+                <div class="g-card-sub">Botol 350ml</div>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="g-card g-3">
+            <div class="g-art art-3">
+                <div class="g-art-inner">
+                    <svg width="110" height="110" viewBox="0 0 110 110" fill="none" opacity=".45">
+                        <!-- Tea leaves cluster -->
+                        <ellipse cx="55" cy="55" rx="30" ry="16" stroke="#9B7EC8" stroke-width="1" transform="rotate(-30 55 55)" fill="none"/>
+                        <ellipse cx="55" cy="55" rx="28" ry="14" stroke="#9B7EC8" stroke-width=".8" transform="rotate(30 55 55)" fill="none"/>
+                        <ellipse cx="55" cy="55" rx="26" ry="13" stroke="#5A8C70" stroke-width=".8" fill="none"/>
+                        <!-- Vein lines -->
+                        <line x1="30" y1="55" x2="80" y2="55" stroke="#9B7EC8" stroke-width=".5"/>
+                        <line x1="38" y1="44" x2="72" y2="66" stroke="#9B7EC8" stroke-width=".4"/>
+                        <line x1="38" y1="66" x2="72" y2="44" stroke="#9B7EC8" stroke-width=".4"/>
+                        <!-- Pucuk tip -->
+                        <ellipse cx="55" cy="20" rx="8" ry="14" stroke="#BF9F58" stroke-width="1" fill="none"/>
+                        <line x1="55" y1="6" x2="55" y2="34" stroke="#BF9F58" stroke-width=".6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Pucuk Daun Teh</div>
+                <div class="g-card-sub">Dipetik Segar</div>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="g-card g-4">
+            <div class="g-art art-4">
+                <div class="g-art-inner">
+                    <svg width="90" height="90" viewBox="0 0 90 90" fill="none" opacity=".45">
+                        <!-- Drop / liquid -->
+                        <path d="M45 10 Q70 40 70 58 A25 25 0 0 1 20 58 Q20 40 45 10Z"
+                              stroke="#5A8C70" stroke-width="1" fill="none"/>
+                        <!-- Ripples inside -->
+                        <ellipse cx="45" cy="60" rx="14" ry="5" stroke="#9B7EC8" stroke-width=".7" fill="none"/>
+                        <ellipse cx="45" cy="60" rx="8"  ry="3" stroke="#9B7EC8" stroke-width=".5" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Ekstrak Alami</div>
+                <div class="g-card-sub">100% Natural</div>
+            </div>
+        </div>
+
+        <!-- Card 5 — wide -->
+        <div class="g-card g-5">
+            <div class="g-art art-5">
+                <div class="g-art-inner">
+                    <svg width="200" height="100" viewBox="0 0 200 100" fill="none" opacity=".4">
+                        <!-- Production line concept -->
+                        <rect x="10"  y="30" width="30" height="50" rx="4" stroke="#9B7EC8" stroke-width="1" fill="none"/>
+                        <rect x="60"  y="20" width="30" height="60" rx="4" stroke="#9B7EC8" stroke-width="1" fill="none"/>
+                        <rect x="110" y="25" width="30" height="55" rx="4" stroke="#9B7EC8" stroke-width="1" fill="none"/>
+                        <rect x="160" y="15" width="30" height="65" rx="4" stroke="#BF9F58" stroke-width="1" fill="none"/>
+                        <!-- Connecting line -->
+                        <line x1="40" y1="55" x2="60"  y2="50" stroke="#5A8C70" stroke-width=".6"/>
+                        <line x1="90" y1="50" x2="110" y2="52" stroke="#5A8C70" stroke-width=".6"/>
+                        <line x1="140" y1="52" x2="160" y2="47" stroke="#5A8C70" stroke-width=".6"/>
+                        <!-- Labels -->
+                        <text x="17"  y="85" font-size="6" fill="#9B7EC8" font-family="serif">Petik</text>
+                        <text x="65"  y="85" font-size="6" fill="#9B7EC8" font-family="serif">Proses</text>
+                        <text x="112" y="85" font-size="6" fill="#9B7EC8" font-family="serif">Kemas</text>
+                        <text x="162" y="85" font-size="6" fill="#BF9F58" font-family="serif">Jual</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Proses Produksi Modern</div>
+                <div class="g-card-sub">Standar Internasional</div>
+            </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="g-card g-6">
+            <div class="g-art art-6">
+                <div class="g-art-inner">
+                    <svg width="90" height="110" viewBox="0 0 90 110" fill="none" opacity=".45">
+                        <!-- Award / quality badge -->
+                        <polygon points="45,10 54,35 80,35 60,52 67,77 45,62 23,77 30,52 10,35 36,35"
+                                 stroke="#BF9F58" stroke-width="1" fill="none"/>
+                        <circle cx="45" cy="48" r="16" stroke="#9B7EC8" stroke-width=".8" fill="none"/>
+                        <text x="37" y="53" font-size="10" fill="#9B7EC8" font-family="serif">#1</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Merek Terpercaya</div>
+                <div class="g-card-sub">Penghargaan Nasional</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CARA PEMBUATAN ═══ -->
+<section class="section process-section" id="proses">
+    <div class="reveal">
+        <div class="s-label">Cara Pembuatan</div>
+        <h2 class="s-title">
+            Dari <em>Alam</em><br>
+            ke <span class="g">Gelas Anda</span>
+        </h2>
+        <p class="s-sub">
+            Lima langkah ketat yang memastikan setiap botol Teh Pucuk Harum
+            menghadirkan kesegaran dan kualitas terbaik tanpa kompromi.
+        </p>
+    </div>
+
+    <div class="steps-wrap">
+        <div class="steps-connector"></div>
+        <div class="steps-grid">
+
+            <div class="step reveal">
+                <div class="step-dot" data-n="01">
+                    <span class="step-icon">🌿</span>
+                </div>
+                <div class="step-title">Pemetikan Pucuk</div>
+                <p class="step-desc">
+                    Hanya pucuk muda (dua daun dan satu kuncup) yang dipetik
+                    secara manual oleh petani terlatih di ketinggian optimal.
+                </p>
+                <div class="step-tag">Petik Manual</div>
+            </div>
+
+            <div class="step reveal d2">
+                <div class="step-dot" data-n="02">
+                    <span class="step-icon">🔬</span>
+                </div>
+                <div class="step-title">Seleksi Ketat</div>
+                <p class="step-desc">
+                    Setiap pucuk melewati proses seleksi kualitas untuk
+                    memastikan hanya daun terbaik yang melanjutkan ke
+                    tahap produksi.
+                </p>
+                <div class="step-tag">Quality Control</div>
+            </div>
+
+            <div class="step reveal d3">
+                <div class="step-dot" data-n="03">
+                    <span class="step-icon">♨️</span>
+                </div>
+                <div class="step-title">Proses Brewing</div>
+                <p class="step-desc">
+                    Pucuk teh diseduh dengan air murni pada suhu dan durasi
+                    optimal untuk mengekstrak senyawa antioksidan dan
+                    cita rasa terbaik.
+                </p>
+                <div class="step-tag">Optimal Brew</div>
+            </div>
+
+            <div class="step reveal d4">
+                <div class="step-dot" data-n="04">
+                    <span class="step-icon">🧪</span>
+                </div>
+                <div class="step-title">Sterilisasi</div>
+                <p class="step-desc">
+                    Teknologi UHT (Ultra High Temperature) memastikan
+                    produk bebas bakteri dan aman dikonsumsi tanpa
+                    bahan pengawet tambahan.
+                </p>
+                <div class="step-tag">UHT Process</div>
+            </div>
+
+            <div class="step reveal d5">
+                <div class="step-dot" data-n="05">
+                    <span class="step-icon">📦</span>
+                </div>
+                <div class="step-title">Pengemasan</div>
+                <p class="step-desc">
+                    Dikemas dalam botol steril berteknologi tinggi yang
+                    menjaga kesegaran dan kualitas rasa hingga sampai
+                    ke tangan konsumen.
+                </p>
+                <div class="step-tag">Sealed Fresh</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ CLOSING ═══ -->
+<section class="closing">
+    <div class="closing-quote reveal">
+        "Alam memberikan yang terbaik — <em>pucuknya.</em><br>
+        Kami hanya menjaganya."
+    </div>
+    <div class="closing-right reveal">
+        <div class="closing-attr">— Komitmen Kami</div>
+        <p class="closing-body">
+            Teh Pucuk Harum percaya bahwa kualitas terbaik berasal dari
+            bahan terbaik. Itulah mengapa kami tak pernah berkompromi
+            dalam memilih setiap pucuk daun teh yang menjadi bahan
+            utama produk kami.
+        </p>
+        <a href="informasi.html" class="btn btn-filled">
+            <span>Lihat Informasi Produk</span>
+            <span>→</span>
+        </a>
+        <a href="index.html" class="btn btn-ghost">← Kembali</a>
+    </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <div class="f-logo">Teh <em>Pucuk</em> Harum</div>
+    <div class="f-copy">© 2026 Teh Pucuk Harum · Website Tugas Sekolah</div>
+    <div class="f-links">
+        <a href="pendahuluan.html">Pendahuluan</a>
+        <a href="informasi.html">Informasi</a>
+        <a href="map.html">Lokasi</a>
+        <a href="infopembuat.html">Pembuat</a>
+    </div>
+</footer>
+
+<script>
+    // ── Navbar scroll
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Hamburger
+    const hbg = document.getElementById('hamburger');
+    const mob = document.getElementById('mobileMenu');
+    function toggleMenu() {
+        hbg.classList.toggle('open');
+        mob.classList.toggle('open');
+        document.body.style.overflow = mob.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMenu() {
+        hbg.classList.remove('open');
+        mob.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.07 });
+    reveals.forEach(el => obs.observe(el));
+
+    // ── Active pill on scroll
+    const sections = ['sejarah','gallery','proses'];
+    const pills = document.querySelectorAll('.pill');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 200) current = id;
+        });
+        pills.forEach(p => {
+            p.classList.remove('active-pill');
+            if (p.getAttribute('href') === '#' + current) p.classList.add('active-pill');
+        });
+    });
+</script>
+</body>
+</html>

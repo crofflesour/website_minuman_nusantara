@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minuman Nusantara — Beranda</title>
+    <meta name="description" content="Website minuman terbaik Nusantara — Teh Pucuk, Es Teh, Air Putih, Ultra Milk.">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ─── CSS Variables ─── */
+        :root {
+            --bg:        #070C09;
+            --bg-card:   #0C1510;
+            --bg-hover:  #111D14;
+            --g-deep:    #142A1C;
+            --g-mid:     #235C3A;
+            --g-light:   #3D7A56;
+            --sage:      #72A884;
+            --gold:      #BFA05A;
+            --gold-lt:   #D9BB7A;
+            --text:      #EDE8DA;
+            --text-mid:  #A09E8E;
+            --text-dim:  #4E4E3E;
+            --line:      rgba(61,122,86,.15);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Jost', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--g-mid); border-radius: 2px; }
+
+        /* ─── NOISE GRAIN OVERLAY ─── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: .025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-size: 180px;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 64px;
+            transition: padding .35s ease, background .35s ease, border-color .35s ease;
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            padding: 18px 64px;
+            background: rgba(7,12,9,.92);
+            backdrop-filter: blur(20px);
+            border-color: var(--line);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-decoration: none;
+            color: var(--text);
+            text-transform: uppercase;
+        }
+        .logo em { font-style: normal; color: var(--sage); }
+
+        .nav-links { display: flex; gap: 44px; list-style: none; }
+        .nav-links a {
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-mid);
+            text-decoration: none;
+            position: relative;
+            transition: color .3s;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0; width: 0; height: 1px;
+            background: var(--sage);
+            transition: width .3s ease;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--gold); }
+
+        /* Hamburger */
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; padding: 4px;
+        }
+        .hamburger span {
+            display: block; width: 22px; height: 1px;
+            background: var(--text); transition: all .3s ease;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(7,12,9,.97);
+            z-index: 499;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 300;
+            color: var(--text-mid);
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: color .3s;
+        }
+        .mobile-menu a:hover { color: var(--sage); }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 130px 64px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Ambient glows */
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+        .glow-1 {
+            width: 700px; height: 700px;
+            right: -150px; top: 50%;
+            transform: translateY(-50%);
+            background: radial-gradient(circle, rgba(35,92,58,.25) 0%, transparent 70%);
+        }
+        .glow-2 {
+            width: 400px; height: 400px;
+            left: -100px; bottom: 0;
+            background: radial-gradient(circle, rgba(20,42,28,.3) 0%, transparent 70%);
+        }
+
+        /* Orbital rings */
+        .rings {
+            position: absolute;
+            right: -80px; top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            border: 1px solid rgba(61,122,86,.12);
+        }
+        .ring:nth-child(1) { width: 640px; height: 640px; animation: spin 40s linear infinite; }
+        .ring:nth-child(2) { width: 480px; height: 480px; border-color: rgba(191,160,90,.07); animation: spin 28s linear infinite reverse; }
+        .ring:nth-child(3) { width: 320px; height: 320px; animation: spin 20s linear infinite; }
+        @keyframes spin {
+            to { transform: translate(-50%,-50%) rotate(360deg); }
+        }
+
+        /* SVG leaf decoration */
+        .hero-leaf {
+            position: absolute;
+            right: 80px; top: 50%;
+            transform: translateY(-50%);
+            opacity: .08;
+        }
+
+        /* Hero text */
+        .hero-eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--sage);
+            opacity: 0;
+            animation: fadeUp .8s ease forwards .3s;
+        }
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 40px; height: 1px;
+            background: var(--sage);
+        }
+
+        .hero-h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(58px, 9vw, 120px);
+            font-weight: 300;
+            line-height: .92;
+            letter-spacing: -3px;
+            margin-top: 28px;
+            max-width: 820px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards .5s;
+        }
+        .hero-h1 em { font-style: italic; color: var(--sage); }
+        .hero-h1 .acc { color: var(--gold); }
+
+        .hero-sub {
+            font-size: 15px;
+            color: var(--text-mid);
+            line-height: 1.85;
+            max-width: 440px;
+            margin-top: 32px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards .7s;
+        }
+
+        .hero-cta {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin-top: 52px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards .9s;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all .3s ease;
+        }
+        .btn-filled {
+            padding: 14px 36px;
+            background: var(--g-mid);
+            color: var(--text);
+            border: 1px solid rgba(61,122,86,.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-filled::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--g-light);
+            transform: translateX(-100%);
+            transition: transform .35s ease;
+        }
+        .btn-filled:hover::before { transform: translateX(0); }
+        .btn-filled span { position: relative; z-index: 1; }
+        .btn-ghost { color: var(--text-mid); }
+        .btn-ghost:hover { color: var(--text); }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 36px; left: 64px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1.6s;
+        }
+        .scroll-hint span {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            writing-mode: vertical-rl;
+        }
+        .scroll-line {
+            width: 1px; height: 56px;
+            background: linear-gradient(to bottom, transparent, var(--sage));
+            animation: pulse 2s ease infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity: .3; transform: scaleY(.8); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* Divider */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--line), transparent);
+        }
+
+        /* ─── BRAND INTRO ─── */
+        .brand-intro {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            padding: 120px 64px;
+        }
+
+        .label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(36px, 4.5vw, 60px);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -1px;
+        }
+        .section-title em { font-style: italic; color: var(--sage); }
+
+        .body-text {
+            font-size: 14px;
+            color: var(--text-mid);
+            line-height: 2;
+            margin-top: 24px;
+        }
+
+        /* Stats grid */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            border: 1px solid var(--line);
+            border-right: none;
+            border-bottom: none;
+            margin-top: 48px;
+        }
+        .stat {
+            padding: 24px 20px;
+            border-right: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+        .stat-n {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            font-weight: 300;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .stat-l {
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* Right visual panel */
+        .brand-visual { position: relative; height: 520px; }
+
+        .vis-card {
+            position: absolute;
+            background: var(--bg-card);
+            border: 1px solid var(--line);
+        }
+
+        .vis-main {
+            inset: 0 0 80px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 36px;
+            overflow: hidden;
+        }
+        .vis-main::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(35,92,58,.25) 0%, transparent 70%);
+        }
+        .vis-svg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-62%);
+        }
+        .vis-tag {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin-bottom: 10px;
+            position: relative; z-index: 1;
+        }
+        .vis-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-style: italic;
+            font-weight: 300;
+            line-height: 1.35;
+            position: relative; z-index: 1;
+        }
+
+        .vis-small {
+            bottom: 0; left: -24px;
+            width: 180px; height: 110px;
+            background: var(--g-deep);
+            border-color: rgba(61,122,86,.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px;
+        }
+        .vis-small .big { 
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 44px; font-weight: 300;
+            color: var(--gold); line-height: 1;
+        }
+        .vis-small .sm {
+            font-size: 8px; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--text-mid);
+            margin-top: 4px;
+        }
+
+        /* ─── NAV CARDS ─── */
+        .explore {
+            padding: 80px 64px 120px;
+        }
+
+        .explore-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 48px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            border: 1px solid var(--line);
+            border-right: none;
+        }
+
+        .e-card {
+            background: var(--bg);
+            padding: 40px 30px;
+            text-decoration: none;
+            color: var(--text);
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+            transition: background .4s ease;
+        }
+        .e-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--g-deep);
+            transform: translateY(100%);
+            transition: transform .4s cubic-bezier(.4,0,.2,1);
+        }
+        .e-card:hover::before { transform: translateY(0); }
+        .e-card > * { position: relative; z-index: 1; }
+
+        .e-num {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .e-icon {
+            font-size: 28px;
+            margin: 20px 0 8px;
+            display: block;
+        }
+
+        .e-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            line-height: 1.15;
+        }
+
+        .e-desc {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.75;
+            transition: color .3s;
+        }
+        .e-card:hover .e-desc { color: var(--text-mid); }
+
+        .e-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px; height: 34px;
+            border: 1px solid var(--line);
+            font-size: 15px;
+            color: var(--sage);
+            margin-top: 28px;
+            transition: all .3s ease;
+        }
+        .e-card:hover .e-arrow {
+            background: var(--sage);
+            border-color: var(--sage);
+            color: var(--bg);
+        }
+
+        /* ─── QUOTE BANNER ─── */
+        .quote-section {
+            padding: 100px 64px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .quote-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 100% at 50% 50%, rgba(20,42,28,.35) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .big-q {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 240px;
+            line-height: 1;
+            color: rgba(61,122,86,.05);
+            position: absolute;
+            top: -40px; left: 50%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            user-select: none;
+        }
+        .quote-body {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(26px, 4vw, 50px);
+            font-weight: 300;
+            font-style: italic;
+            max-width: 780px;
+            margin: 0 auto 24px;
+            line-height: 1.45;
+            position: relative; z-index: 1;
+        }
+        .quote-body em { font-style: normal; color: var(--sage); }
+        .quote-attr {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            position: relative; z-index: 1;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 48px 64px;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .f-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            letter-spacing: 3px;
+            color: var(--text-mid);
+        }
+        .f-logo em { font-style: normal; color: var(--sage); }
+        .f-copy { font-size: 11px; color: var(--text-dim); letter-spacing: .5px; }
+        .f-links { display: flex; gap: 28px; }
+        .f-links a {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: color .3s;
+        }
+        .f-links a:hover { color: var(--sage); }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity .85s ease, transform .85s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── DROPDOWN PRODUK ─── */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown > a { display: flex; align-items: center; gap: 5px; }
+        .nav-dropdown > a::after { display: none; }
+        .dropdown-chevron {
+            display: inline-block;
+            width: 0; height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid var(--text-mid);
+            transition: transform .3s, border-color .3s;
+            margin-top: 1px;
+        }
+        .nav-dropdown:hover .dropdown-chevron,
+        .nav-dropdown.open .dropdown-chevron {
+            transform: rotate(180deg);
+            border-top-color: var(--sage);
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 16px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: rgba(10,18,12,.96);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--line);
+            min-width: 200px;
+            padding: 8px 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease, transform .25s ease;
+            z-index: 600;
+        }
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: 50%;
+            transform: translateX(-50%);
+            width: 10px; height: 10px;
+            background: rgba(10,18,12,.96);
+            border-left: 1px solid var(--line);
+            border-top: 1px solid var(--line);
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        }
+        .nav-dropdown:hover .dropdown-menu,
+        .nav-dropdown.open .dropdown-menu {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-mid);
+            text-decoration: none;
+            transition: color .25s, background .25s;
+        }
+        .dropdown-menu a:hover {
+            color: var(--text);
+            background: rgba(61,122,86,.1);
+        }
+        .dropdown-menu a .d-icon {
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .dropdown-menu .d-sep {
+            height: 1px;
+            background: var(--line);
+            margin: 4px 0;
+        }
+
+        /* Mobile dropdown */
+        .mob-prod-toggle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 36px;
+            font-weight: 300;
+            color: var(--text-mid);
+            text-decoration: none;
+            letter-spacing: 2px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .mob-prod-toggle:hover { color: var(--sage); }
+        .mob-submenu {
+            display: flex; flex-direction: column; align-items: center; gap: 16px;
+            overflow: hidden; max-height: 0;
+            transition: max-height .4s ease, opacity .4s ease;
+            opacity: 0;
+        }
+        .mob-submenu.open { max-height: 300px; opacity: 1; }
+        .mob-submenu a {
+            font-size: 20px !important;
+            color: var(--sage) !important;
+            letter-spacing: 2px;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 1100px) {
+            .cards-grid { grid-template-columns: repeat(2,1fr); }
+            .brand-intro { grid-template-columns: 1fr; gap: 60px; }
+            .brand-visual { height: 380px; }
+        }
+        @media (max-width: 768px) {
+            nav { padding: 20px 24px; }
+            nav.scrolled { padding: 14px 24px; }
+            .nav-links { display: none !important; }
+            .hamburger { display: flex; }
+
+            .hero { padding: 100px 24px 80px; }
+            .scroll-hint { left: 24px; }
+            .brand-intro { padding: 80px 24px; }
+            .explore { padding: 60px 24px 100px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .quote-section { padding: 80px 24px; }
+            footer { padding: 36px 24px; flex-direction: column; text-align: center; }
+            .f-links { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile overlay menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a>
+    <button class="mob-prod-toggle" onclick="toggleMobSub()">Produk ▾</button>
+    <div class="mob-submenu" id="mobSub">
+        <a href="teh_pucuk.html" onclick="closeMenu()">🍃 Teh Pucuk</a>
+        <a href="es_teh.html" onclick="closeMenu()">🧊 Es Teh</a>
+        <a href="air_putih.html" onclick="closeMenu()">💧 Air Putih</a>
+        <a href="ultra_milk.html" onclick="closeMenu()">🥛 Ultra Milk</a>
+    </div>
+    <a href="informasi.html" onclick="closeMenu()">Informasi</a>
+    <a href="map.html" onclick="closeMenu()">Lokasi</a>
+    <a href="pembuat.html" onclick="closeMenu()">Pembuat</a>
+</div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="navbar">
+    <a href="index.html" class="logo">Minuman <em>Nusantara</em></a>
+    <ul class="nav-links">
+        <li><a href="index.html" class="active">Beranda</a></li>
+        <li class="nav-dropdown" id="navDropdown">
+            <a href="#" onclick="toggleDropdown(event)">
+                Produk <span class="dropdown-chevron"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a href="teh pucuk.html"><span class="d-icon">🍃</span> Teh Pucuk</a>
+                <div class="d-sep"></div>
+                <a href="es_teh.html"><span class="d-icon">🧊</span> Es Teh</a>
+                <div class="d-sep"></div>
+                <a href="air_putih.html"><span class="d-icon">💧</span> Air Putih</a>
+                <div class="d-sep"></div>
+                <a href="ultra_milk.html"><span class="d-icon">🥛</span> Ultra Milk</a>
+            </div>
+        </li>
+        <li><a href="informasi.html">Informasi</a></li>
+        <li><a href="map.html">Lokasi</a></li>
+        <li><a href="pembuat.html">Pembuat</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <div class="rings">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+    </div>
+
+    <!-- Decorative tea-leaf SVG -->
+    <svg class="hero-leaf" width="420" height="420" viewBox="0 0 420 420" fill="none">
+        <ellipse cx="210" cy="210" rx="130" ry="200" stroke="#3D7A56" stroke-width="1.5" fill="none"/>
+        <ellipse cx="210" cy="210" rx="80"  ry="155" stroke="#3D7A56" stroke-width=".8" fill="none"/>
+        <line x1="210" y1="10" x2="210" y2="410" stroke="#3D7A56" stroke-width=".8"/>
+        <path d="M210 80 Q260 140 210 210 Q160 280 210 340" stroke="#3D7A56" stroke-width=".8" fill="none"/>
+    </svg>
+
+    <div class="hero-eyebrow">Minuman Segar Pilihan Nusantara</div>
+
+    <h1 class="hero-h1">
+        Selamat<br>
+        <em>Datang</em> di<br>
+        Dunia <span class="acc">Minuman</span><br>
+        Nusantara.
+    </h1>
+
+    <p class="hero-sub">
+        Temukan pilihan minuman terbaik — dari teh segar, es teh tradisional,
+        air murni, hingga susu berkualitas. Semua dalam satu tempat.
+    </p>
+
+    <div class="hero-cta">
+        <a href="#produk" class="btn btn-filled">
+            <span>Lihat Produk</span>
+            <span>↓</span>
+        </a>
+        <a href="informasi.html" class="btn btn-ghost">Lihat Informasi ↗</a>
+    </div>
+
+    <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ BRAND INTRO ═══ -->
+<section class="brand-intro">
+    <div class="reveal">
+        <div class="label">— Tentang Website</div>
+        <h2 class="section-title">
+            Beragam Pilihan<br>
+            <em>Minuman</em><br>
+            Terbaik
+        </h2>
+        <p class="body-text">
+            Website ini menampilkan informasi lengkap tentang berbagai minuman populer
+            di Indonesia — mulai dari sejarah, cara pembuatan, hingga harga dan lokasi pembelian.
+        </p>
+        <p class="body-text">
+            Dikurasi dengan cermat untuk memberikan pengalaman belajar yang menyenangkan
+            tentang minuman favorit sehari-hari masyarakat Nusantara.
+        </p>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-n">4</div>
+                <div class="stat-l">Produk Minuman</div>
+            </div>
+            <div class="stat">
+                <div class="stat-n">100%</div>
+                <div class="stat-l">Info Lengkap</div>
+            </div>
+            <div class="stat">
+                <div class="stat-n">XI-4</div>
+                <div class="stat-l">Kelompok Kami</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="brand-visual reveal">
+        <!-- Main card -->
+        <div class="vis-card vis-main">
+            <!-- Elegant tea SVG illustration -->
+            <svg class="vis-svg" width="200" height="200" viewBox="0 0 200 200" fill="none" opacity=".45">
+                <!-- Cup body -->
+                <path d="M40 90 Q40 150 100 155 Q160 150 160 90 Z" stroke="#3D7A56" stroke-width="1.2" fill="none"/>
+                <line x1="40" y1="90" x2="160" y2="90" stroke="#3D7A56" stroke-width="1.2"/>
+                <!-- Handle -->
+                <path d="M160 100 Q185 100 185 120 Q185 140 160 140" stroke="#3D7A56" stroke-width="1.2" fill="none"/>
+                <!-- Saucer -->
+                <ellipse cx="100" cy="160" rx="72" ry="10" stroke="#3D7A56" stroke-width="1" fill="none"/>
+                <!-- Steam -->
+                <path d="M75 75 Q80 58 75 40" stroke="#72A884" stroke-width="1" fill="none" stroke-linecap="round"/>
+                <path d="M100 68 Q105 50 100 32" stroke="#72A884" stroke-width="1" fill="none" stroke-linecap="round"/>
+                <path d="M125 75 Q130 58 125 40" stroke="#72A884" stroke-width="1" fill="none" stroke-linecap="round"/>
+                <!-- Tea surface leaves -->
+                <ellipse cx="90" cy="115" rx="16" ry="5" stroke="#3D7A56" stroke-width=".8" fill="none" transform="rotate(-15 90 115)"/>
+                <ellipse cx="115" cy="120" rx="12" ry="4" stroke="#3D7A56" stroke-width=".8" fill="none" transform="rotate(20 115 120)"/>
+            </svg>
+            <div class="vis-tag">— Kualitas Premium</div>
+            <div class="vis-quote">"Pucuk Terbaik,<br>Rasa Terbaik"</div>
+        </div>
+        <!-- Small accent card -->
+        <div class="vis-card vis-small">
+            <div class="big">100%</div>
+            <div class="sm">Natural Tea</div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ EXPLORE CARDS ═══ -->
+<section class="explore" id="produk">
+    <div class="explore-header reveal">
+        <div>
+            <div class="label">— Produk Kami</div>
+            <h2 class="section-title">
+                Pilih<br>
+                <em>Minuman</em><br>
+                Favoritmu
+            </h2>
+        </div>
+    </div>
+
+    <div class="cards-grid reveal">
+        <a href="teh_pucuk.html" class="e-card">
+            <div>
+                <div class="e-num">01</div>
+                <span class="e-icon">🍃</span>
+                <div class="e-title">Teh Pucuk</div>
+                <div class="e-desc">Teh premium dari pucuk daun teh pilihan, segar dan alami tanpa pengawet untuk setiap tegukan.</div>
+            </div>
+            <div class="e-arrow">→</div>
+        </a>
+
+        <a href="Es_teh.html" class="e-card">
+            <div>
+                <div class="e-num">02</div>
+                <span class="e-icon">🧊</span>
+                <div class="e-title">Es Teh</div>
+                <div class="e-desc">Minuman tradisional paling ikonik — es teh manis dingin yang selalu menemani hari-hari mu.</div>
+            </div>
+            <div class="e-arrow">→</div>
+        </a>
+
+        <a href="air_putih.html" class="e-card">
+            <div>
+                <div class="e-num">03</div>
+                <span class="e-icon">💧</span>
+                <div class="e-title">Air Putih</div>
+                <div class="e-desc">Sumber kehidupan terbaik — air murni berkualitas untuk menjaga kesehatan dan vitalitas harianmu.</div>
+            </div>
+            <div class="e-arrow">→</div>
+        </a>
+
+        <a href="ultra_milk.html" class="e-card">
+            <div>
+                <div class="e-num">04</div>
+                <span class="e-icon">🥛</span>
+                <div class="e-title">Ultra Milk</div>
+                <div class="e-desc">Susu segar bernutrisi tinggi dari sapi pilihan — kaya protein dan kalsium untuk tulang kuat.</div>
+            </div>
+            <div class="e-arrow">→</div>
+        </a>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ QUOTE ═══ -->
+<section class="quote-section">
+    <div class="big-q">"</div>
+    <blockquote class="quote-body reveal">
+        "Minuman bukan sekadar pelepas dahaga —<br>
+        ia adalah <em>cerita</em>, <em>tradisi</em>,<br>
+        dan bagian dari kehidupan sehari-hari."
+    </blockquote>
+    <p class="quote-attr reveal">— Minuman Nusantara, Indonesia</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <div class="f-logo">Minuman <em>Nusantara</em></div>
+    <div class="f-copy">© 2026 Minuman Nusantara &nbsp;·&nbsp; Website Tugas Sekolah</div>
+    <div class="f-links">
+        <a href="teh_pucuk.html">Teh Pucuk</a>
+        <a href="Es_teh.html">Es Teh</a>
+        <a href="air_putih.html">Air Putih</a>
+        <a href="ultra_milk.html">Ultra Milk</a>
+        <a href="pembuat.html">Pembuat</a>
+    </div>
+</footer>
+
+<script>
+    // ── Navbar scroll effect
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── Desktop dropdown toggle
+    function toggleDropdown(e) {
+        e.preventDefault();
+        document.getElementById('navDropdown').classList.toggle('open');
+    }
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        const dd = document.getElementById('navDropdown');
+        if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
+
+    // ── Mobile submenu
+    function toggleMobSub() {
+        document.getElementById('mobSub').classList.toggle('open');
+    }
+
+    // ── Hamburger / Mobile menu
+    const hbg = document.getElementById('hamburger');
+    const mob = document.getElementById('mobileMenu');
+    function toggleMenu() {
+        hbg.classList.toggle('open');
+        mob.classList.toggle('open');
+        document.body.style.overflow = mob.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMenu() {
+        hbg.classList.remove('open');
+        mob.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                revealObs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

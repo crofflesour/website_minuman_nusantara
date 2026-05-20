@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sejarah Ultra Milk - Menjaga Alami Kebajikan</title>
+    <style>
+        /* --- RESET & BASIC STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* --- NAVIGATION BAR --- */
+        header {
+            background-color: #0056b3; /* Warna biru khas Ultra Milk */
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #ffcc00; /* Aksen kuning cerah */
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* --- SECTION STYLES --- */
+        section {
+            padding: 100px 20px 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #0056b3;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #ffcc00;
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        /* --- 1. BERANDA (HERO SECTION) --- */
+        #beranda {
+            background: linear-gradient(rgba(0, 86, 179, 0.7), rgba(0, 86, 179, 0.5)), 
+                        url('https://www.ultrajaya.co.id/images/produk_ultramilk_flavour_2025.png') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            padding: 0 20px;
+            max-width: 100%;
+        }
+
+        #beranda h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        #beranda p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .btn-explore {
+            background-color: #ffcc00;
+            color: #0056b3;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .btn-explore:hover {
+            transform: scale(1.05);
+            background-color: #fff;
+        }
+
+        /* --- 2. SEJARAH --- */
+        .sejarah-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .sejarah-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .sejarah-text p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .sejarah-img {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .sejarah-img img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        /* --- 3. GALERI --- */
+        .galeri-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .galeri-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            height: 250px;
+        }
+
+        .galeri-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .galeri-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .galeri-desc {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 86, 179, 0.8);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* --- 4. PROSES --- */
+        .proses-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .proses-step {
+            display: flex;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            align-items: center;
+            gap: 20px;
+        }
+
+        .step-number {
+            background-color: #ffcc00;
+            color: #0056b3;
+            font-size: 24px;
+            font-weight: bold;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .step-text h3 {
+            color: #0056b3;
+            margin-bottom: 5px;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+            .nav-links {
+                margin-top: 15px;
+            }
+            .nav-links li {
+                margin: 0 10px;
+            }
+            #beranda h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGASI -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">ULTRA <span>MILK</span></div>
+            <ul class="nav-links">
+                <li><a href="#beranda">Beranda</a></li>
+                <li><a href="#sejarah">Sejarah</a></li>
+                <li><a href="#galeri">Galeri</a></li>
+                <li><a href="#proses">Proses</a></li>
+                <li><a href="index.html">back to home</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- 1. BERANDA -->
+    <section id="beranda">
+        <h1>Pionir Susu UHT di Indonesia</h1>
+        <p>Menghadirkan kebaikan nutrisi susu alami untuk keluarga Indonesia sejak tahun 1970-an.</p>
+        <a href="#sejarah" class="btn-explore">Pelajari Sejarah Kami</a>
+    </section>
+
+    <!-- 2. SEJARAH -->
+    <section id="sejarah">
+        <h2 class="section-title">Sejarah Ultra Milk</h2>
+        <div class="sejarah-content">
+            <div class="sejarah-text">
+                <p><strong>PT Ultrajaya Milk Industry & Trading Company Tbk</strong> bermula dari sebuah usaha keluarga yang dirintis oleh <strong>Ahmad Prawirawidjaja</strong> pada tahun 1958 di Bandung, Jawa Barat. Pada awalnya, usaha ini hanya berupa industri rumahan yang memproses susu sapi secara sederhana.</p>
+                <p>Seiring perkembangan teknologi, pada tahun 1971, perusahaan ini resmi bertransformasi menjadi badan hukum PT Ultrajaya. Gebrakan besar terjadi pada tahun <strong>1975</strong>, di mana PT Ultrajaya menjadi pionir di Asia Tenggara yang memperkenalkan teknologi pengolahan susu <strong>UHT (Ultra High Temperature)</strong> dan pengemasan karton steril aseptik dari Tetra Pak.</p>
+                <p>Sejak saat itu, brand <strong>Ultra Milk</strong> lahir dan menjadi pemimpin pasar dalam industri susu cair siap minum di Indonesia hingga hari ini, berkomitmen menyediakan produk berkualitas tinggi dari bahan alami.</p>
+            </div>
+            <div class="sejarah-img">
+                <!-- Ganti src dengan gambar pabrik lama/kantor Ultra Milk jika ada -->
+                <img src="https://www.ultrajaya.co.id/images/header-marketing.jpg" alt="Kantor PT Ultrajaya">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. GALERI -->
+    <section id="galeri">
+        <h2 class="section-title">Galeri Produk</h2>
+        <div class="galeri-grid">
+            <div class="galeri-item">
+                <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/01-1-full-cream.jpg" alt="Ultra Milk Full Cream">
+                <div class="galeri-desc">Ultra Milk Full Cream - Rasa Murni Lengkap Nutrisi</div>
+            </div>
+            <div class="galeri-item">
+                <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/01-2-cokelat.jpg" alt="Ultra Milk Cokelat">
+                <div class="galeri-desc">Ultra Milk Cokelat - Varian Rasa Favorit</div>
+            </div>
+            <div class="galeri-item">
+                <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/01-5-stroberi.jpg" alt="Ultra Milk Stroberi">
+                <div class="galeri-desc">Ultra Milk Stroberi - Segar dan Nikmat</div>
+            </div>
+            <div class="galeri-item">
+                <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/02-1-plain-250-ml.jpg" alt="Ultra Milk Low Fat">
+                <div class="galeri-desc">Ultra Milk Low Fat Source of Calcium - Gaya Hidup Sehat</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PROSES -->
+    <section id="proses">
+        <h2 class="section-title">Proses Produksi UHT</h2>
+        <div class="proses-container">
+            <div class="proses-step">
+                <div class="step-number">1</div>
+                <div class="step-text">
+                    <h3>Pemerahan & Seleksi Bahan Baku</h3>
+                    <p>Susu sapi segar didapatkan dari peternakan yang higienis, kemudian melalui uji kualitas ketat di laboratorium sebelum diproses.</p>
+                </div>
+            </div>
+            <div class="proses-step">
+                <div class="step-number">2</div>
+                <div class="step-text">
+                    <h3>Pemanasan Suhu Tinggi (UHT)</h3>
+                    <p>Susu dipanaskan pada suhu sangat tinggi, yaitu sekitar 135°C - 140°C dalam waktu singkat (2-4 detik) untuk membunuh bakteri patogen tanpa merusak nutrisi alami susu.</p>
+                </div>
+            </div>
+            <div class="proses-step">
+                <div class="step-number">3</div>
+                <div class="step-text">
+                    <h3>Pengemasan Aseptik</h3>
+                    <p>Susu yang telah steril langsung dikemas menggunakan kemasan karton aseptik 6 lapis yang melindungi susu dari sinar ultraviolet, udara, dan bakteri luar.</p>
+                </div>
+            </div>
+            <div class="proses-step">
+                <div class="step-number">4</div>
+                <div class="step-text">
+                    <h3>Distribusi</h3>
+                    <p>Produk siap dikirim ke seluruh penjuru Indonesia, tetap segar dan tahan lama hingga 10 bulan meski tanpa bahan pengawet (selama kemasan belum dibuka).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Website Sejarah Ultra Milk. Dibuat untuk Keperluan Edukasi / Portofolio VS Code.</p>
+    </footer>
+
+</body>
+</html>
