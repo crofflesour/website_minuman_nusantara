@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Lokasi — Minuman Nusantara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* ─── VARIABLES ─── */
+        :root {
+            --bg:          #1a1a1a;
+            --bg-card:     #222222;
+            --bg-hover:    #2a2a2a;
+            --bg-surface:  #2e2e2e;
+            --border:      rgba(255,255,255,0.07);
+            --border-light: rgba(255,255,255,0.12);
+            --text:        #e8e8e8;
+            --text-mid:    #a0a0a0;
+            --text-dim:    #666666;
+            --accent:      #c8a96e;   /* warm gold accent */
+            --accent-lt:   #e2c99a;
+            --accent-dm:   #8a6a3a;
+            --green:       #6a9e6f;
+            --blue:        #5b8db8;
+            --red:         #c06060;
+            --amber:       #c8a050;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-dm); border-radius: 2px; }
+
+        /* ─── SCROLL PROGRESS ─── */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0;
+            height: 2px; width: 100%;
+            background: linear-gradient(to right, var(--accent-dm), var(--accent), var(--accent-lt));
+            transform-origin: left; transform: scaleX(0);
+            z-index: 600; transition: transform .08s linear;
+        }
+
+        /* ─── NOISE OVERLAY ─── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            opacity: 0.025;
+            pointer-events: none; z-index: 9998;
+        }
+
+        /* ─── SUBTLE GRID PATTERN ─── */
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: -1;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; inset: 0 0 auto 0; z-index: 500;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 28px 64px;
+            transition: padding .35s, background .35s, border-color .35s;
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            padding: 16px 64px;
+            background: rgba(26, 26, 26, 0.94);
+            backdrop-filter: blur(20px);
+            border-color: var(--border-light);
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px; font-weight: 600;
+            letter-spacing: 2px; text-decoration: none;
+            color: var(--text); text-transform: uppercase;
+        }
+        .logo em { font-style: italic; color: var(--accent); }
+
+        .nav-links { display: flex; gap: 42px; list-style: none; }
+        .nav-links a {
+            font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+            color: var(--text-mid); text-decoration: none;
+            position: relative; transition: color .3s; font-weight: 500;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute;
+            bottom: -5px; left: 0; width: 0; height: 1px;
+            background: var(--accent); transition: width .3s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a.active { color: var(--accent); }
+
+        .hamburger {
+            display: none; flex-direction: column;
+            gap: 6px; cursor: pointer; padding: 4px;
+        }
+        .hamburger span {
+            display: block; width: 22px; height: 1px;
+            background: var(--text); transition: all .3s;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 5px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
+
+        .mobile-menu {
+            display: none; position: fixed; inset: 0; z-index: 499;
+            background: rgba(26,26,26,0.98);
+            flex-direction: column;
+            justify-content: center; align-items: center; gap: 40px;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px; font-weight: 400;
+            color: var(--text-mid); text-decoration: none;
+            letter-spacing: 3px; transition: color .3s;
+        }
+        .mobile-menu a:hover, .mobile-menu a.active { color: var(--accent); }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 0 64px 90px;
+            position: relative; overflow: hidden;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -62%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(160px, 22vw, 340px);
+            font-weight: 300; font-style: italic;
+            color: rgba(200,169,110,0.04);
+            line-height: 1; pointer-events: none;
+            user-select: none; white-space: nowrap;
+            letter-spacing: -8px;
+        }
+
+        /* Decorative corner ornament */
+        .corner-ornament {
+            position: absolute; top: 120px; right: 80px;
+            width: 80px; height: 80px;
+            pointer-events: none; opacity: 0.15;
+        }
+        .corner-ornament::before, .corner-ornament::after {
+            content: '';
+            position: absolute;
+            border: 1px solid var(--accent);
+        }
+        .corner-ornament::before {
+            width: 60px; height: 60px;
+            top: 0; right: 0;
+        }
+        .corner-ornament::after {
+            width: 40px; height: 40px;
+            bottom: 0; left: 0;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 20px; font-weight: 500;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .hero-eyebrow::before {
+            content: ''; display: block;
+            width: 40px; height: 1px; background: var(--accent);
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(48px, 7vw, 100px);
+            font-weight: 300; line-height: 1.05;
+            letter-spacing: -2px;
+            color: var(--text);
+        }
+        .hero h1 em { font-style: italic; color: var(--accent); }
+
+        .hero-sub {
+            font-size: 15px; color: var(--text-mid);
+            line-height: 1.7; margin-top: 24px;
+            max-width: 480px; font-weight: 300;
+        }
+
+        .hero-line {
+            position: absolute; bottom: 0; left: 64px;
+            width: 1px; height: 80px; background: var(--accent);
+            opacity: 0.3;
+        }
+
+        /* ─── PRODUCT FILTER ─── */
+        .filter-bar {
+            display: flex; align-items: center; gap: 12px;
+            padding: 0 64px; margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-label {
+            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--text-dim); font-weight: 500; margin-right: 8px;
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: 1px solid var(--border-light);
+            background: transparent;
+            color: var(--text-mid);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+            cursor: pointer; border-radius: 2px;
+            transition: all .3s;
+        }
+        .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+        .filter-btn.active {
+            background: var(--accent); border-color: var(--accent);
+            color: #1a1a1a; font-weight: 600;
+        }
+
+        /* ─── MAIN MAP SECTION ─── */
+        .map-section {
+            padding: 80px 64px 0;
+        }
+        .section-eyebrow {
+            font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 16px; font-weight: 500;
+            display: flex; align-items: center; gap: 14px;
+        }
+        .section-eyebrow::before {
+            content: ''; display: block;
+            width: 30px; height: 1px; background: var(--accent);
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 300; color: var(--text);
+            letter-spacing: -1px; margin-bottom: 48px;
+        }
+        .section-title em { font-style: italic; color: var(--accent); }
+
+        /* ─── MAP + SIDEBAR LAYOUT ─── */
+        .map-layout {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 24px;
+            min-height: 580px;
+        }
+
+        /* Sidebar */
+        .map-sidebar {
+            display: flex; flex-direction: column; gap: 12px;
+            overflow-y: auto;
+            max-height: 580px;
+            padding-right: 4px;
+        }
+        .map-sidebar::-webkit-scrollbar { width: 3px; }
+        .map-sidebar::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+
+        .location-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 18px 20px;
+            cursor: pointer;
+            transition: all .3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .location-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: var(--card-color, var(--accent));
+            opacity: 0;
+            transition: opacity .3s;
+        }
+        .location-card:hover { background: var(--bg-hover); border-color: var(--border-light); }
+        .location-card:hover::before { opacity: 1; }
+        .location-card.active { background: var(--bg-hover); border-color: var(--border-light); }
+        .location-card.active::before { opacity: 1; }
+
+        .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .card-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--card-color, var(--accent));
+            flex-shrink: 0;
+        }
+        .card-product {
+            font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-dim); font-weight: 500;
+        }
+        .card-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px; font-weight: 400;
+            color: var(--text); margin-bottom: 4px; line-height: 1.2;
+        }
+        .card-address {
+            font-size: 12px; color: var(--text-dim); line-height: 1.5;
+        }
+        .card-tag {
+            display: inline-block; margin-top: 10px;
+            padding: 4px 10px;
+            border: 1px solid var(--border-light);
+            border-radius: 2px;
+            font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* Map Container */
+        #map {
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            min-height: 580px;
+            position: relative;
+        }
+
+        /* Leaflet dark skin */
+        .leaflet-tile-pane { filter: grayscale(100%) brightness(0.6) contrast(1.1); }
+        .leaflet-container { background: #1a1a1a !important; }
+        .leaflet-control-zoom a {
+            background: var(--bg-card) !important;
+            border-color: var(--border-light) !important;
+            color: var(--text-mid) !important;
+        }
+        .leaflet-control-zoom a:hover { background: var(--bg-hover) !important; color: var(--text) !important; }
+        .leaflet-control-attribution { background: rgba(26,26,26,0.8) !important; color: var(--text-dim) !important; font-size: 10px !important; }
+        .leaflet-control-attribution a { color: var(--accent-dm) !important; }
+
+        /* Custom Popup */
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-light) !important;
+            border-radius: 4px !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+            color: var(--text) !important;
+        }
+        .leaflet-popup-tip { background: var(--bg-card) !important; }
+        .leaflet-popup-content { margin: 18px 20px !important; min-width: 200px; }
+        .popup-product {
+            font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-dim); margin-bottom: 6px; font-weight: 500;
+        }
+        .popup-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px; color: var(--text); margin-bottom: 6px;
+        }
+        .popup-address { font-size: 12px; color: var(--text-mid); line-height: 1.5; margin-bottom: 12px; }
+        .popup-link {
+            display: inline-block; padding: 8px 18px;
+            background: transparent;
+            border: 1px solid var(--border-light);
+            color: var(--text-mid);
+            text-decoration: none; font-size: 11px;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            transition: all .3s; border-radius: 2px;
+        }
+        .popup-link:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ─── PRODUCT CARDS SECTION ─── */
+        .products-section {
+            padding: 100px 64px 40px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            padding: 36px 28px;
+            text-decoration: none;
+            color: inherit;
+            transition: background .3s;
+            position: relative;
+            overflow: hidden;
+            display: block;
+        }
+        .product-card::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: var(--p-color, var(--accent));
+            transform: scaleX(0); transform-origin: left;
+            transition: transform .4s ease;
+        }
+        .product-card:hover { background: var(--bg-hover); }
+        .product-card:hover::after { transform: scaleX(1); }
+
+        .p-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 60px; font-weight: 300; font-style: italic;
+            color: rgba(255,255,255,0.04);
+            line-height: 1; margin-bottom: 16px;
+            letter-spacing: -2px;
+        }
+        .p-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--p-color, var(--accent));
+            margin-bottom: 14px;
+        }
+        .p-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px; font-weight: 400;
+            color: var(--text); margin-bottom: 6px;
+        }
+        .p-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; margin-bottom: 18px; }
+        .p-locations {
+            font-size: 11px; letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+        .p-locations span { color: var(--p-color, var(--accent)); font-weight: 500; }
+
+        .p-arrow {
+            position: absolute; bottom: 28px; right: 28px;
+            font-size: 18px; color: var(--text-dim);
+            transition: all .3s;
+        }
+        .product-card:hover .p-arrow { color: var(--p-color, var(--accent)); transform: translate(4px, -4px); }
+
+        /* ─── STATS STRIP ─── */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 60px 0;
+        }
+        .stat-item {
+            background: var(--bg); padding: 40px 28px;
+            text-align: center;
+        }
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px; font-weight: 300; font-style: italic;
+            color: var(--accent); line-height: 1;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+            color: var(--text-dim); font-weight: 500;
+        }
+
+        /* ─── REVEAL ANIMATION ─── */
+        .reveal {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 50px 64px;
+            border-top: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px; margin-top: 60px;
+        }
+        .f-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px; letter-spacing: 2px; color: var(--text);
+        }
+        .f-logo em { font-style: italic; color: var(--accent); }
+        .f-copy { font-size: 12px; color: var(--text-dim); }
+        .f-links { display: flex; gap: 28px; flex-wrap: wrap; }
+        .f-links a {
+            font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+            color: var(--text-dim); text-decoration: none; transition: color .3s;
+        }
+        .f-links a:hover { color: var(--accent); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 1100px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-strip { grid-template-columns: repeat(2, 1fr); }
+            .map-layout { grid-template-columns: 280px 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px 24px; }
+            nav.scrolled { padding: 14px 24px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+
+            .hero { padding: 0 24px 80px; }
+            .map-section, .products-section { padding: 80px 24px 0; }
+            .filter-bar { padding: 0 24px; }
+
+            .map-layout { grid-template-columns: 1fr; }
+            .map-sidebar { max-height: 260px; }
+            #map { min-height: 380px; }
+
+            .products-grid { grid-template-columns: 1fr; }
+            .stats-strip { grid-template-columns: repeat(2, 1fr); }
+
+            footer { padding: 40px 24px; flex-direction: column; text-align: center; }
+        }
+
+        /* ─── CUSTOM MARKER ─── */
+        .custom-marker {
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .marker-inner {
+            width: 12px; height: 12px; border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 4px rgba(200,169,110,0.2), 0 2px 8px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .marker-inner::after {
+            content: ''; position: absolute;
+            top: 50%; left: 50%;
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 1px solid currentColor;
+            opacity: 0.4;
+            transform: translate(-50%, -50%);
+            animation: markerPulse 2s ease-out infinite;
+        }
+        @keyframes markerPulse {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+        }
+
+        /* Leaflet popup close */
+        .leaflet-popup-close-button {
+            color: var(--text-dim) !important;
+            font-size: 18px !important;
+            top: 8px !important; right: 12px !important;
+        }
+        .leaflet-popup-close-button:hover { color: var(--text) !important; }
+    </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a>
+    <a href="es_teh.html" onclick="closeMenu()">Produk</a>
+    <a href="informasi.html" onclick="closeMenu()">Informasi</a>
+    <a href="map.html" onclick="closeMenu()" class="active">Lokasi</a>
+    <a href="pembuat.html" onclick="closeMenu()">Pembuat</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a href="index.html" class="logo">Es <em>Teh</em></a>
+    <ul class="nav-links">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="pendahuluan.html">Pendahuluan</a></li>
+        <li><a href="informasi.html">Informasi</a></li>
+        <li><a href="map.html" class="active">Lokasi</a></li>
+        <li><a href="infopembuat.html">Pembuat</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg-text">Peta</div>
+    <div class="corner-ornament"></div>
+    <div class="hero-line"></div>
+
+    <div class="hero-eyebrow">Minuman Nusantara</div>
+    <h1>Peta <em>Lokasi</em><br>Produksi</h1>
+    <p class="hero-sub">
+        Jelajahi pusat-pusat produksi minuman ikonik Indonesia — dari pabrik susu UHT pertama di Asia Tenggara hingga ladang teh pegunungan yang menyegarkan.
+    </p>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+    <div class="stat-item reveal">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Produk Unggulan</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:.1s">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Titik Lokasi</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:.2s">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Provinsi</div>
+    </div>
+    <div class="stat-item reveal" style="transition-delay:.3s">
+        <div class="stat-num">60<em style="font-size:28px">+</em></div>
+        <div class="stat-label">Tahun Sejarah</div>
+    </div>
+</div>
+
+<!-- PRODUCT CARDS -->
+<section class="products-section">
+    <div class="section-eyebrow">Empat Produk</div>
+    <h2 class="section-title">Minuman yang Kami <em>Ceritakan</em></h2>
+
+    <div class="products-grid reveal">
+        <!-- Es Teh -->
+        <a href="es_teh.html" class="product-card" style="--p-color: var(--amber);">
+            <div class="p-number">01</div>
+            <div class="p-dot"></div>
+            <div class="p-name">Es Teh</div>
+            <div class="p-desc">Minuman teh dingin tradisional khas Indonesia yang menyegarkan.</div>
+            <div class="p-locations"><span>4</span> lokasi terdekat</div>
+            <div class="p-arrow">↗</div>
+        </a>
+        <!-- Ultra Milk -->
+        <a href="ultra_milk.html" class="product-card" style="--p-color: var(--blue);">
+            <div class="p-number">02</div>
+            <div class="p-dot"></div>
+            <div class="p-name">Ultra Milk</div>
+            <div class="p-desc">Pionir susu UHT di Asia Tenggara, diproduksi sejak 1975.</div>
+            <div class="p-locations"><span>3</span> fasilitas produksi</div>
+            <div class="p-arrow">↗</div>
+        </a>
+        <!-- Air Putih -->
+        <a href="air_putih.html" class="product-card" style="--p-color: var(--green);">
+            <div class="p-number">03</div>
+            <div class="p-dot"></div>
+            <div class="p-name">Air Putih</div>
+            <div class="p-desc">Sumber kehidupan alami dari mata air pegunungan Indonesia.</div>
+            <div class="p-locations"><span>3</span> sumber mata air</div>
+            <div class="p-arrow">↗</div>
+        </a>
+        <!-- Teh Pucuk -->
+        <a href="teh_pucuk.html" class="product-card" style="--p-color: var(--green);">
+            <div class="p-number">04</div>
+            <div class="p-dot"></div>
+            <div class="p-name">Teh Pucuk Harum</div>
+            <div class="p-desc">Teh botol dengan daun pucuk terbaik, harum dan segar alami.</div>
+            <div class="p-locations"><span>2</span> perkebunan teh</div>
+            <div class="p-arrow">↗</div>
+        </a>
+    </div>
+</section>
+
+<!-- MAP SECTION -->
+<section class="map-section" style="padding-top: 80px; padding-bottom: 80px;">
+    <div class="section-eyebrow">Peta Interaktif</div>
+    <h2 class="section-title">Temukan <em>Lokasi</em></h2>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+        <span class="filter-label">Filter:</span>
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="es-teh" style="--btn-color: var(--amber)">Es Teh</button>
+        <button class="filter-btn" data-filter="ultra-milk" style="--btn-color: var(--blue)">Ultra Milk</button>
+        <button class="filter-btn" data-filter="air-putih" style="--btn-color: var(--green)">Air Putih</button>
+        <button class="filter-btn" data-filter="teh-pucuk" style="--btn-color: var(--green)">Teh Pucuk</button>
+    </div>
+
+    <div class="map-layout reveal">
+        <!-- Sidebar -->
+        <div class="map-sidebar" id="locationList"></div>
+        <!-- Map -->
+        <div id="map"></div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="f-logo">Minuman <em>Nusantara</em></div>
+    <div class="f-copy">© 2026 · Website Tugas Sekolah Kelompok Minuman XI-4</div>
+    <div class="f-links">
+        <a href="pendahuluan.html">Pendahuluan</a>
+        <a href="informasi.html">Informasi</a>
+        <a href="map.html">Lokasi</a>
+        <a href="infopembuat.html">Pembuat</a>
+    </div>
+</footer>
+
+<!-- LEAFLET JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+// ── DATA LOKASI ──
+const locations = [
+    // ES TEH
+    {
+        id: 1, category: 'es-teh',
+        product: 'Es Teh', name: 'Es Teh Indonesia — Bandung',
+        address: 'Jl. Riau No. 22, Bandung, Jawa Barat',
+        lat: -6.9022, lng: 107.6180,
+        color: '#c8a050', link: 'es_teh.html',
+        tag: 'Gerai Flagship'
+    },
+    {
+        id: 2, category: 'es-teh',
+        product: 'Es Teh', name: 'Es Teh Indonesia — Jakarta',
+        address: 'Jl. Sudirman Kav. 18, Jakarta Pusat, DKI Jakarta',
+        lat: -6.2088, lng: 106.8456,
+        color: '#c8a050', link: 'es_teh.html',
+        tag: 'Cabang Utama'
+    },
+    {
+        id: 3, category: 'es-teh',
+        product: 'Es Teh', name: 'Es Teh Indonesia — Yogyakarta',
+        address: 'Jl. Malioboro No. 47, Yogyakarta',
+        lat: -7.7928, lng: 110.3663,
+        color: '#c8a050', link: 'es_teh.html',
+        tag: 'Cabang'
+    },
+    {
+        id: 4, category: 'es-teh',
+        product: 'Es Teh', name: 'Es Teh Indonesia — Surabaya',
+        address: 'Jl. Pemuda No. 31, Surabaya, Jawa Timur',
+        lat: -7.2575, lng: 112.7521,
+        color: '#c8a050', link: 'es_teh.html',
+        tag: 'Cabang'
+    },
+
+    // ULTRA MILK
+    {
+        id: 5, category: 'ultra-milk',
+        product: 'Ultra Milk', name: 'PT Ultrajaya — Pabrik Utama',
+        address: 'Jl. Raya Cimareme No. 131, Padalarang, Bandung Barat',
+        lat: -6.8508, lng: 107.4763,
+        color: '#5b8db8', link: 'ultra_milk.html',
+        tag: 'Pabrik UHT'
+    },
+    {
+        id: 6, category: 'ultra-milk',
+        product: 'Ultra Milk', name: 'PT Ultrajaya — Kantor Pusat',
+        address: 'Jl. Raya Cimareme No. 131-A, Bandung Barat',
+        lat: -6.8520, lng: 107.4750,
+        color: '#5b8db8', link: 'ultra_milk.html',
+        tag: 'Kantor Pusat'
+    },
+    {
+        id: 7, category: 'ultra-milk',
+        product: 'Ultra Milk', name: 'Peternakan Sapi Mitra Ultrajaya',
+        address: 'Lembang, Bandung Barat, Jawa Barat',
+        lat: -6.8134, lng: 107.6172,
+        color: '#5b8db8', link: 'ultra_milk.html',
+        tag: 'Peternakan Mitra'
+    },
+
+    // AIR PUTIH
+    {
+        id: 8, category: 'air-putih',
+        product: 'Air Putih', name: 'Mata Air Ciburial',
+        address: 'Ciburial, Cimenyan, Bandung, Jawa Barat',
+        lat: -6.8377, lng: 107.6783,
+        color: '#6a9e6f', link: 'air_putih.html',
+        tag: 'Mata Air'
+    },
+    {
+        id: 9, category: 'air-putih',
+        product: 'Air Putih', name: 'Sumber Air Pegunungan Dieng',
+        address: 'Banjarnegara, Jawa Tengah',
+        lat: -7.2028, lng: 109.9103,
+        color: '#6a9e6f', link: 'air_putih.html',
+        tag: 'Mata Air'
+    },
+    {
+        id: 10, category: 'air-putih',
+        product: 'Air Putih', name: 'Pabrik AMDK Sukabumi',
+        address: 'Sukabumi, Jawa Barat',
+        lat: -6.9147, lng: 106.9306,
+        color: '#6a9e6f', link: 'air_putih.html',
+        tag: 'Pabrik AMDK'
+    },
+
+    // TEH PUCUK
+    {
+        id: 11, category: 'teh-pucuk',
+        product: 'Teh Pucuk Harum', name: 'Perkebunan Teh Kayu Aro',
+        address: 'Kayu Aro, Kerinci, Jambi',
+        lat: -2.0227, lng: 101.4814,
+        color: '#6a9e8f', link: 'teh_pucuk.html',
+        tag: 'Perkebunan Teh'
+    },
+    {
+        id: 12, category: 'teh-pucuk',
+        product: 'Teh Pucuk Harum', name: 'Pabrik Teh Pucuk — Sukabumi',
+        address: 'Cicurug, Sukabumi, Jawa Barat',
+        lat: -6.7725, lng: 106.8261,
+        color: '#6a9e8f', link: 'teh_pucuk.html',
+        tag: 'Pabrik Produksi'
+    },
+];
+
+let currentFilter = 'all';
+let markers = [];
+let activeCard = null;
+
+// ── INIT MAP ──
+const map = L.map('map', {
+    center: [-6.9, 107.6],
+    zoom: 8,
+    zoomControl: true,
+}).setView([-6.9, 107.6], 8);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19,
+}).addTo(map);
+
+// ── CREATE MARKER ICON ──
+function createIcon(color) {
+    return L.divIcon({
+        className: '',
+        html: `<div style="
+            width:14px; height:14px; border-radius:50%;
+            background:${color};
+            border:2px solid rgba(255,255,255,0.9);
+            box-shadow:0 0 0 4px ${color}33, 0 2px 10px rgba(0,0,0,0.6);
+            position:relative;
+        "></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
+        popupAnchor: [0, -10],
+    });
+}
+
+// ── RENDER SIDEBAR ──
+function renderSidebar(filter) {
+    const list = document.getElementById('locationList');
+    list.innerHTML = '';
+    const filtered = filter === 'all' ? locations : locations.filter(l => l.category === filter);
+
+    filtered.forEach(loc => {
+        const card = document.createElement('div');
+        card.className = 'location-card';
+        card.style.setProperty('--card-color', loc.color);
+        card.dataset.id = loc.id;
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="card-dot" style="background:${loc.color}"></div>
+                <div class="card-product">${loc.product}</div>
+            </div>
+            <div class="card-name">${loc.name}</div>
+            <div class="card-address">${loc.address}</div>
+            <div class="card-tag">${loc.tag}</div>
+        `;
+        card.addEventListener('click', () => focusLocation(loc, card));
+        list.appendChild(card);
+    });
+}
+
+// ── RENDER MARKERS ──
+function renderMarkers(filter) {
+    markers.forEach(m => m.remove());
+    markers = [];
+    const filtered = filter === 'all' ? locations : locations.filter(l => l.category === filter);
+
+    filtered.forEach(loc => {
+        const marker = L.marker([loc.lat, loc.lng], { icon: createIcon(loc.color) })
+            .addTo(map)
+            .bindPopup(`
+                <div class="popup-product">${loc.product}</div>
+                <div class="popup-name">${loc.name}</div>
+                <div class="popup-address">${loc.address}</div>
+                <a href="${loc.link}" class="popup-link">Lihat Halaman →</a>
+            `, { maxWidth: 260, className: 'custom-popup' });
+
+        marker.on('click', () => {
+            // highlight sidebar card
+            const card = document.querySelector(`.location-card[data-id="${loc.id}"]`);
+            if (card) {
+                document.querySelectorAll('.location-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+
+        markers.push(marker);
+    });
+
+    // fit bounds
+    if (markers.length > 0) {
+        const group = L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.2));
+    }
+}
+
+// ── FOCUS LOCATION ──
+function focusLocation(loc, card) {
+    document.querySelectorAll('.location-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    map.setView([loc.lat, loc.lng], 13, { animate: true });
+    // open popup
+    const markerIndex = (currentFilter === 'all' ? locations : locations.filter(l => l.category === currentFilter))
+        .findIndex(l => l.id === loc.id);
+    if (markers[markerIndex]) markers[markerIndex].openPopup();
+}
+
+// ── FILTER BUTTONS ──
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderSidebar(currentFilter);
+        renderMarkers(currentFilter);
+    });
+});
+
+// ── INIT ──
+renderSidebar('all');
+renderMarkers('all');
+
+// ── NAVBAR SCROLL ──
+const navbar = document.getElementById('navbar');
+const prog = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+    const scrolled = window.scrollY;
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.transform = `scaleX(${scrolled / total})`;
+}, { passive: true });
+
+// ── HAMBURGER ──
+function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+}
+function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+// ── SCROLL REVEAL ──
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.07 });
+revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
