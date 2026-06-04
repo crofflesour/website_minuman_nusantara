@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendahuluan — ES TEH</title>
+    <meta name="description" content="Sejarah, galeri foto, dan cara pembuatan Es Teh — minuman tradisional terbaik Nusantara.">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* ─── Variables (ES TEH RETRO AMBER THEME) ─── */
+        :root {
+            --bg:         #FAF6ED;
+            --bg-card:    #FFFDF7;
+            --bg-hover:   #F2EAD5;
+            --p-deep:     #2C1A0E;   /* Dark tea brown */
+            --p-mid:      #7B4F2E;   /* Tea amber */
+            --p-light:    #A67C52;   /* Light amber */
+            --heather:    #8B5E3C;   /* Warm tea */
+            --heather-lt: #B07D52;
+            --heather-dm: #4A2D16;
+            --sage:       #5A8C70;
+            --gold:       #D4A435;   /* Honey gold */
+            --ice:        #7AADBE;   /* Iced tea blue */
+            --ice-lt:     #C2DDE7;
+            --text:       #2C1A0E;
+            --text-mid:   #6B4226;
+            --text-dim:   #A07850;
+            --line:       rgba(139,94,60,.18);
+            --line-gold:  rgba(212,164,53,.2);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Nunito', sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        ::-webkit-scrollbar { width:4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--heather); border-radius:2px; }
+
+        /* ── SCROLL PROGRESS BAR ── */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px; width: 100%;
+            background: linear-gradient(to right, var(--heather), var(--gold), var(--ice));
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 600;
+            transition: transform .08s linear;
+        }
+
+        /* ── GRAIN FILM TEXTURE OVERLAY ── */
+        /* Static grain — animasi dihapus karena feTurbulence animated = sangat berat di GPU */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translateZ(0);
+        }
+
+        /* Subtle Retro Dot Grid */
+        body::after {
+            content:'';
+            position:fixed; inset:0;
+            pointer-events:none; z-index:-1;
+            background-image: radial-gradient(rgba(139,94,60,.15) 1px, transparent 1px);
+            background-size: 22px 22px;
+            opacity: 0.7;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position:fixed;
+            inset:0 0 auto 0; z-index:500;
+            display:flex; justify-content:space-between; align-items:center;
+            padding:28px 64px;
+            transition: padding .35s, background .35s, border-color .35s;
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            padding:16px 64px;
+            background: rgba(250, 246, 237, 0.92);
+            backdrop-filter: blur(18px);
+            border-color: var(--line);
+        }
+        .logo {
+            font-family:'Cormorant Garamond',serif;
+            font-size:22px; font-weight:600;
+            letter-spacing:2px; text-decoration:none;
+            color:var(--text); text-transform:uppercase;
+        }
+        .logo em { font-style:italic; color:var(--heather); }
+
+        .nav-links { display:flex; gap:42px; list-style:none; }
+        .nav-links a {
+            font-size:12px;
+            letter-spacing:2px; text-transform:uppercase;
+            color:var(--text-mid); text-decoration:none;
+            position:relative; transition:color .3s; font-weight: 600;
+        }
+        .nav-links a::after {
+            content:'';
+            position:absolute;
+            bottom:-5px; left:0; width:0; height:2px;
+            background:var(--heather); transition:width .3s;
+        }
+        .nav-links a:hover { color:var(--p-deep); }
+        .nav-links a:hover::after,
+        .nav-links a.active::after { width:100%; }
+        .nav-links a.active { color:var(--heather); }
+
+        .hamburger {
+            display:none;
+            flex-direction:column;
+            gap:6px; cursor:pointer; padding:4px;
+        }
+        .hamburger span {
+            display:block;
+            width:22px; height:2px;
+            background:var(--text); transition:all .3s;
+        }
+        .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(5px,6px); }
+        .hamburger.open span:nth-child(2) { opacity:0; }
+        .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-6px); }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display:none;
+            position:fixed;
+            inset:0; z-index:499;
+            background:rgba(250, 246, 237, 0.98);
+            flex-direction:column;
+            justify-content:center; align-items:center; gap:40px;
+        }
+        .mobile-menu.open { display:flex; }
+        .mobile-menu a {
+            font-family:'Cormorant Garamond',serif;
+            font-size:34px; font-weight:400;
+            color:var(--text-mid); text-decoration:none;
+            letter-spacing:2px; transition:color .3s;
+        }
+        .mobile-menu a:hover { color:var(--heather); }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height:100vh;
+            display:flex; flex-direction:column; justify-content:flex-end;
+            padding: 0 64px 100px;
+            position:relative; overflow:hidden;
+        }
+
+        .hero::before {
+            content:'';
+            position:absolute; inset:0;
+            background: linear-gradient(135deg, rgba(139,94,60,.06) 0%, transparent 55%, rgba(122,173,190,.06) 100%);
+            pointer-events:none;
+        }
+
+        /* Big background number */
+        .hero-bg-num {
+            position:absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-58%);
+            font-family:'Cormorant Garamond',serif;
+            font-size: clamp(280px, 35vw, 480px);
+            font-weight:300; font-style:italic;
+            color: rgba(139,94,60,.04);
+            line-height:1; pointer-events:none;
+            user-select:none; white-space:nowrap;
+            letter-spacing:-20px;
+        }
+
+        /* Retro decorative vintage stamp top-right */
+        .hero-stamp {
+            position: absolute;
+            top: 120px; right: 90px;
+            width: 140px; height: 140px;
+            pointer-events: none;
+            opacity: 0.22;
+            animation: stampSpin 60s linear infinite;
+            will-change: transform;
+        }
+        
+        @keyframes stampSpin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        /* Glow orbs – warm amber/ice */
+        .orb {
+            position:absolute;
+            border-radius:50%;
+            pointer-events:none; filter:blur(90px); z-index: -1;
+            will-change: transform;
+        }
+        .orb-1 {
+            width:600px; height:600px;
+            top:-100px; right:-150px;
+            background:radial-gradient(circle, rgba(212,164,53,.14) 0%, transparent 70%);
+        }
+        .orb-2 {
+            width:400px; height:400px;
+            bottom:-80px; left:-80px;
+            background:radial-gradient(circle, rgba(122,173,190,.14) 0%, transparent 70%);
+        }
+
+        /* Retro geometric — tea cup rings */
+        .hero-geo {
+            position:absolute;
+            top:100px; right:80px;
+            width:340px; height:340px;
+            pointer-events:none;
+            opacity: 0.5;
+        }
+
+        .hero-eyebrow {
+            font-size:11px;
+            letter-spacing:4px; font-weight: 600;
+            text-transform:uppercase; color:var(--heather);
+            display:flex; align-items:center; gap:16px;
+            opacity:0; animation: fadeUp .8s ease forwards .3s;
+            position:relative; z-index:1;
+        }
+        .hero-eyebrow::before {
+            content:'';
+            display:block;
+            width:36px; height:2px; background:var(--heather);
+        }
+
+        .hero-h1 {
+            font-family:'Cormorant Garamond',serif;
+            font-size: clamp(54px, 8vw, 110px);
+            font-weight:400; line-height:1;
+            letter-spacing:-1px; margin-top:24px;
+            max-width:900px;
+            color: var(--p-deep);
+            opacity:0; animation: fadeUp 1s ease forwards .5s;
+            position:relative; z-index:1;
+        }
+        .hero-h1 em { font-style:italic; color:var(--heather); }
+        .hero-h1 .gold { color:var(--gold); }
+
+        .hero-desc {
+            font-size:16px;
+            color:var(--text-mid);
+            line-height:1.7; max-width:500px;
+            margin-top:28px;
+            opacity:0; animation: fadeUp 1s ease forwards .7s;
+            position:relative; z-index:1;
+        }
+
+        /* Page nav pills */
+        .hero-pills {
+            display:flex;
+            gap:12px; flex-wrap:wrap;
+            margin-top:40px;
+            opacity:0; animation: fadeUp 1s ease forwards .9s;
+            position:relative; z-index:1;
+        }
+        .pill {
+            display:inline-flex;
+            align-items:center; gap:8px;
+            padding:10px 24px;
+            border:1px solid var(--line); border-radius: 50px;
+            font-size:11px; letter-spacing:2px; font-weight: 600;
+            text-transform:uppercase; color:var(--text-mid);
+            text-decoration:none;
+            transition: all .3s ease;
+            cursor:pointer; background:var(--bg-card);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .pill:hover, .pill.active-pill {
+            border-color:var(--heather);
+            color:var(--bg-card);
+            background: var(--heather);
+            box-shadow: 0 6px 15px rgba(139,94,60,.2);
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            position:absolute;
+            bottom:36px; right:64px;
+            display:flex; flex-direction:column;
+            align-items:center; gap:10px;
+            opacity:0; animation: fadeIn 1s ease forwards 1.6s;
+        }
+        .scroll-hint span {
+            font-size:10px; font-weight: 600;
+            letter-spacing:3px;
+            text-transform:uppercase; color:var(--text-dim);
+            writing-mode:vertical-rl;
+        }
+        .scroll-line {
+            width:2px; height:56px;
+            background:linear-gradient(to bottom, transparent, var(--heather));
+            animation: pulse 2s ease infinite;
+        }
+
+        /* ─── Divider ─── */
+        .divider {
+            width:100%; height:1px;
+            background:linear-gradient(to right, transparent, var(--line), transparent);
+        }
+
+        /* ─── SECTION BASE ─── */
+        .section { padding: 120px 64px; position:relative; }
+
+        .s-label {
+            font-size:11px; font-weight: 600;
+            letter-spacing:4px;
+            text-transform:uppercase; color:var(--heather);
+            display:flex; align-items:center; gap:14px;
+            margin-bottom:20px;
+        }
+        .s-label::before {
+            content:''; width:30px; height:2px; background:var(--heather);
+        }
+
+        .s-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size: clamp(38px, 5vw, 58px);
+            font-weight:400; line-height:1.1; color: var(--p-deep);
+            margin-bottom:16px;
+        }
+        .s-title em { font-style:italic; color:var(--heather); }
+        .s-title .g { color:var(--gold); }
+
+        .s-sub {
+            font-size:16px; color:var(--text-mid);
+            line-height:1.7; max-width:540px;
+        }
+
+        /* ─── RETRO VINTAGE ORNAMENT ─── */
+        .retro-ornament {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+        .retro-ornament span {
+            font-size: 10px;
+            letter-spacing: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .retro-ornament::before,
+        .retro-ornament::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+        }
+
+        /* ─── SEJARAH / TIMELINE ─── */
+        .timeline-wrap { margin-top:72px; position:relative; }
+
+        .timeline-wrap::before {
+            content:''; position:absolute;
+            left:50%; top:0; bottom:0; width:1px;
+            background:linear-gradient(to bottom, transparent, var(--line) 10%, var(--line) 90%, transparent);
+            transform:translateX(-50%);
+        }
+
+        .tl-item {
+            display:grid; grid-template-columns:1fr 1fr;
+            gap:0; margin-bottom:64px; position:relative;
+        }
+        .tl-item:last-child { margin-bottom:0; }
+
+        .tl-item::before {
+            content:''; position:absolute;
+            left:50%; top:36px; width:14px; height:14px;
+            background:var(--bg-card); border: 2px solid var(--heather);
+            border-radius:50%; transform:translate(-50%,-50%);
+            box-shadow:0 0 15px rgba(139,94,60,.2);
+        }
+
+        .tl-item.right .tl-content { grid-column:2; }
+        .tl-item.right .tl-year { grid-column:1; grid-row:1; text-align:right; padding-right:40px; }
+        .tl-item.left .tl-content { grid-column:1; text-align:right; padding-right:40px; }
+        .tl-item.left .tl-year { grid-column:2; grid-row:1; padding-left:40px; }
+
+        .tl-year {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(52px,7vw,90px);
+            font-weight:300; line-height:1;
+            color:rgba(139,94,60,.13);
+            align-self:start; padding-top:8px;
+        }
+
+        .tl-content { padding-left:40px; align-self:center; }
+        .tl-item.left .tl-content { padding-left:0; }
+
+        .tl-tag {
+            font-size:10px; font-weight: 600;
+            letter-spacing:3px;
+            text-transform:uppercase; color:var(--heather);
+            margin-bottom:10px;
+        }
+
+        .tl-heading {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(24px,2.5vw,34px); color: var(--p-deep);
+            font-weight:600; margin-bottom:12px; line-height:1.2;
+        }
+
+        .tl-text { font-size:15px; color:var(--text-mid); line-height:1.7; }
+
+        /* Retro stamp badge */
+        .tl-badge {
+            display:inline-block; margin-top:16px;
+            padding:6px 16px;
+            border: 1.5px solid var(--gold);
+            border-radius: 3px;
+            font-size:10px; letter-spacing:3px; font-weight: 600;
+            text-transform:uppercase; color:var(--gold); background: var(--bg-card);
+            position: relative;
+            box-shadow: 2px 2px 0 rgba(212,164,53,.2);
+        }
+        .tl-badge::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border: 1px dashed rgba(212,164,53,.3);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        /* ─── GALLERY ─── */
+        .gallery-section {
+            background: #FFFDF7;
+            border-radius: 40px;
+            box-shadow: 0 10px 60px rgba(44,26,14,.05);
+            margin: 0 20px;
+            border: 1px solid var(--line);
+        }
+
+        .gallery-grid {
+            margin-top:64px; display:grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto; gap:16px;
+        }
+
+        /* ── GALLERY CARD ── */
+        .g-card {
+            background:var(--bg); border-radius: 15px;
+            border:1px solid var(--line); overflow:hidden;
+            position:relative; cursor:pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transform-style: preserve-3d;
+            transition: box-shadow .4s ease, transform .08s ease;
+            will-change: transform;
+        }
+        .g-card:hover {
+            box-shadow: 0 20px 50px rgba(44,26,14,.1);
+        }
+        .g-card::before {
+            content:''; position:absolute; inset:0;
+            background:rgba(139,94,60,.05);
+            opacity:0; transition:opacity .4s; z-index:2;
+        }
+        .g-card:hover::before { opacity:1; }
+
+        /* Retro corner marks on hover */
+        .g-card::after {
+            content:'';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(212,164,53,.0);
+            border-radius: 10px;
+            transition: border-color .4s ease;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .g-card:hover::after {
+            border-color: rgba(212,164,53,.25);
+        }
+
+        /* ── g-art: aspect ratio container ── */
+        .g-art {
+            width:100%;
+            padding-bottom:100%;
+            position:relative;
+            overflow:hidden;
+        }
+        .g-art-inner {
+            position:absolute; inset:0;
+            display:flex; align-items:center; justify-content:center;
+            transition:transform .6s ease;
+        }
+        .g-card:hover .g-art-inner { transform:scale(1.04); }
+
+        /* ════════════════════════════════════════════
+           GALLERY IMAGE TEMPLATE
+           ════════════════════════════════════════════
+
+           CARA PAKAI:
+           1. Ganti src="" di tiap .g-img dengan path foto kamu
+           2. Ukuran ideal tercantum di data-size tiap card
+           3. Placeholder otomatis tampil jika foto belum ada
+
+           Ukuran per card:
+           · g-1 (landscape besar)  → 1000 × 650 px
+           · g-2 (portrait medium)  → 420 × 360 px
+           · g-3 (portrait medium)  → 520 × 445 px
+           · g-4 (portrait kecil)   → 380 × 325 px
+           · g-5 (landscape besar)  → 1000 × 650 px
+           · g-6 (portrait medium)  → 520 × 445 px
+        ════════════════════════════════════════════ */
+        .g-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+            transition: transform .6s ease;
+        }
+        .g-card:hover .g-img { transform: scale(1.06); }
+
+        /* Hide img when empty or broken */
+        .g-img[src=""],
+        .g-img:not([src]),
+        .g-img.broken { display: none; }
+
+        /* Show placeholder when img is empty/broken */
+        .g-img[src=""] ~ .g-placeholder,
+        .g-img:not([src]) ~ .g-placeholder,
+        .g-img.broken ~ .g-placeholder { display: flex; }
+
+        /* Placeholder styling */
+        .g-placeholder {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-align: center;
+            padding: 20px;
+        }
+        .g-ph-icon {
+            font-size: 28px;
+            opacity: 0.5;
+        }
+        .g-ph-size {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--heather);
+            letter-spacing: 1px;
+        }
+        .g-ph-hint {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            font-weight: 600;
+            border: 1px dashed var(--line);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        /* AESTHETIC GRADIENTS FOR CARDS (background saat belum ada foto) */
+        .art-1 { background:linear-gradient(135deg, #F9F3E8 0%, #EDE0CB 100%); }
+        .art-2 { background:linear-gradient(160deg, #FFFDF7 0%, #F3E9D8 100%); }
+        .art-3 { background:linear-gradient(110deg, #F3E9D8 0%, #E8D9C0 100%); }
+        .art-4 { background:linear-gradient(145deg, #FFFDF7 0%, #EDE0CB 100%); }
+        .art-5 { background:linear-gradient(130deg, #F9F3E8 0%, #E8D9C0 100%); }
+        .art-6 { background:linear-gradient(155deg, #F3E9D8 0%, #EDE0CB 100%); }
+
+        /* Ice-tinted placeholder for variety */
+        .art-3, .art-6 {
+            background:linear-gradient(135deg, #EEF5F8 0%, #D8EAF0 60%, #C2DDE7 100%);
+        }
+
+        .g-card-overlay {
+            position:absolute; bottom:0; left:0; right:0;
+            padding:25px 20px;
+            background:linear-gradient(to top, rgba(44,26,14,.85) 0%, transparent 100%);
+            z-index:3; transform:translateY(10px);
+            opacity:0; transition:all .35s ease;
+        }
+        .g-card:hover .g-card-overlay { opacity:1; transform:translateY(0); }
+
+        .g-card-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size:20px; font-weight:600; color: #FFFDF7;
+            margin-bottom:4px;
+        }
+        .g-card-sub {
+            font-size:10px; font-weight: 600;
+            letter-spacing:2px; text-transform:uppercase; color:var(--gold);
+        }
+
+        /* Grid placement */
+        .g-1 { grid-column: 1/6;  grid-row:1; }
+        .g-2 { grid-column: 6/9;  grid-row:1; }
+        .g-3 { grid-column: 9/13; grid-row:1; }
+        .g-4 { grid-column: 1/4;  grid-row:2; }
+        .g-5 { grid-column: 4/9;  grid-row:2; }
+        .g-6 { grid-column: 9/13; grid-row:2; }
+
+        .g-1 .g-art, .g-5 .g-art { padding-bottom:65%; }
+        .g-2 .g-art, .g-3 .g-art, .g-4 .g-art, .g-6 .g-art { padding-bottom:85%; }
+
+        /* ─── CARA PEMBUATAN ─── */
+        .process-section { position:relative; overflow:hidden; }
+        .process-section::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(ellipse 80% 60% at 30% 50%, rgba(122,173,190,.07) 0%, transparent 70%);
+        }
+
+        .steps-wrap { margin-top:72px; position:relative; }
+        .steps-connector {
+            position:absolute; top:48px; left:0; right:0; height:2px;
+            background:linear-gradient(to right, transparent 4%, var(--line) 10%, var(--line) 90%, transparent 96%);
+        }
+
+        .steps-grid {
+            display:grid; grid-template-columns:repeat(5,1fr); gap:0;
+            position:relative; z-index:1;
+        }
+
+        .step {
+            padding:0 24px; position:relative; text-align:center;
+            transition:transform .3s ease;
+        }
+        .step:hover { transform:translateY(-8px); }
+        .step:first-child { padding-left:0; }
+        .step:last-child  { padding-right:0; }
+
+        .step-dot {
+            width:96px; height:96px; border-radius:50%;
+            border:2px solid var(--line);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 28px; background:var(--bg-card);
+            position:relative; transition:border-color .3s, box-shadow .3s;
+        }
+        .step:hover .step-dot {
+            border-color:var(--heather);
+            box-shadow:0 10px 30px rgba(139,94,60,.15);
+        }
+
+        .step-dot::before {
+            content:attr(data-n); position:absolute;
+            top:-8px; right:-8px; width:28px; height:28px;
+            background:var(--heather); border-radius:50%;
+            font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center;
+            color:var(--bg-card); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .step-icon { font-size:35px; }
+        .step-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size:22px; font-weight:600; color: var(--p-deep);
+            margin-bottom:10px; line-height:1.2;
+        }
+        .step-desc { font-size:14px; color:var(--text-mid); line-height:1.6; }
+        .step-tag {
+            display:inline-block; margin-top:14px;
+            padding:6px 14px;
+            border: 1.5px solid var(--line-gold);
+            border-radius: 3px; background: var(--bg-card);
+            font-size:9px; letter-spacing:2px; font-weight: 600;
+            text-transform:uppercase; color:var(--gold);
+            box-shadow: 2px 2px 0 rgba(212,164,53,.1);
+        }
+
+        /* ─── CLOSING BANNER ─── */
+        .closing {
+            padding:100px 64px; display:grid;
+            grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+            position:relative; overflow:hidden;
+            background: var(--bg-card); border-top: 1px solid var(--line);
+        }
+        .closing::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(ellipse at bottom left, rgba(122,173,190,.07) 0%, transparent 60%);
+        }
+
+        .closing-quote {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(30px,4vw,52px); font-weight:400; font-style:italic;
+            line-height:1.35; position:relative; z-index:1; color: var(--p-deep);
+        }
+        .closing-quote em { font-style:normal; color:var(--heather); }
+
+        .closing-right { position:relative; z-index:1; }
+        .closing-attr {
+            font-size:11px; font-weight: 600; letter-spacing:3px;
+            text-transform:uppercase; color:var(--gold); margin-bottom:20px;
+        }
+        .closing-body { font-size:16px; color:var(--text-mid); line-height:1.8; margin-bottom:32px; }
+
+        .btn {
+            display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+            font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:600;
+            transition:all .3s ease; border-radius: 50px;
+        }
+        .btn-filled {
+            padding:14px 35px; background:var(--heather); color:var(--bg-card);
+            box-shadow: 0 8px 20px rgba(139,94,60,.2);
+        }
+        .btn-filled:hover { background:var(--p-deep); transform: translateY(-3px); }
+        .btn-ghost { color:var(--text-mid); margin-left:20px; }
+        .btn-ghost:hover { color:var(--heather); }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding:44px 64px; background: var(--p-deep); color: var(--bg-card);
+            display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
+        }
+        .f-logo { font-family:'Cormorant Garamond',serif; font-size:18px; letter-spacing:2px; }
+        .f-logo em { font-style:italic; color:var(--gold); }
+        .f-copy { font-size:12px; color:rgba(255,255,255,0.5); }
+        .f-links { display:flex; gap:28px; }
+        .f-links a {
+            font-size:11px; font-weight: 600; letter-spacing:2px;
+            text-transform:uppercase; color:rgba(255,255,255,0.65);
+            text-decoration:none; transition:color .3s;
+        }
+        .f-links a:hover { color:var(--gold); }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(32px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity:0; } to { opacity:1; }
+        }
+        @keyframes pulse {
+            0%,100% { opacity:.3; transform:scaleY(.8); }
+            50%      { opacity:1; transform:scaleY(1); }
+        }
+
+        /* Ice condensation drip — retro shimmer on ice accent */
+        @keyframes iceDrip {
+            0%   { transform: translateY(-4px); opacity: 0; }
+            30%  { opacity: 1; }
+            100% { transform: translateY(8px); opacity: 0; }
+        }
+
+        .reveal { opacity:0; transform:translateY(38px); transition: opacity .85s ease, transform .85s ease; }
+        .reveal.d2 { transition-delay:.1s; }
+        .reveal.d3 { transition-delay:.2s; }
+        .reveal.d4 { transition-delay:.3s; }
+        .reveal.d5 { transition-delay:.4s; }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+
+        /* ─── DROPDOWN PRODUK ─── */
+        .nav-dropdown { position: relative; }
+        .nav-dropdown > a { display: flex; align-items: center; gap: 5px; }
+        .nav-dropdown > a::after { display: none !important; }
+        .dropdown-chevron {
+            display: inline-block;
+            width: 0; height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid var(--text-mid);
+            transition: transform .3s, border-color .3s;
+            margin-top: 1px;
+        }
+        .nav-dropdown:hover .dropdown-chevron,
+        .nav-dropdown.open .dropdown-chevron {
+            transform: rotate(180deg);
+            border-top-color: var(--heather);
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 16px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-8px);
+            background: rgba(255,253,247,.97);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--line);
+            min-width: 200px;
+            padding: 8px 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease, transform .25s ease;
+            z-index: 600;
+            box-shadow: 0 12px 40px rgba(44,26,14,.12);
+        }
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: 50%;
+            transform: translateX(-50%);
+            width: 10px; height: 10px;
+            background: rgba(255,253,247,.97);
+            border-left: 1px solid var(--line);
+            border-top: 1px solid var(--line);
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        }
+        .nav-dropdown:hover .dropdown-menu,
+        .nav-dropdown.open .dropdown-menu {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateX(-50%) translateY(0);
+        }
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-mid);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color .25s, background .25s;
+        }
+        .dropdown-menu a:hover {
+            color: var(--heather);
+            background: rgba(139,94,60,.06);
+        }
+        .dropdown-menu a .d-icon { font-size: 14px; flex-shrink: 0; }
+        .dropdown-menu a::after { display: none !important; }
+        .dropdown-menu .d-sep {
+            height: 1px;
+            background: var(--line);
+            margin: 4px 0;
+        }
+
+        /* Mobile dropdown */
+        .mob-prod-toggle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 34px; font-weight: 400;
+            color: var(--text-mid); letter-spacing: 2px;
+            background: none; border: none; cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+            transition: color .3s;
+        }
+        .mob-prod-toggle:hover { color: var(--heather); }
+        .mob-submenu {
+            display: flex; flex-direction: column; align-items: center; gap: 14px;
+            overflow: hidden; max-height: 0;
+            transition: max-height .4s ease, opacity .4s ease;
+            opacity: 0;
+        }
+        .mob-submenu.open { max-height: 300px; opacity: 1; }
+        .mob-submenu a { font-size: 20px !important; color: var(--heather) !important; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width:1100px) {
+            .timeline-wrap::before { display:none; }
+            .tl-item { grid-template-columns:1fr; gap:16px; }
+            .tl-item.right .tl-content, .tl-item.left .tl-content { grid-column:1; text-align:left; padding:0; }
+            .tl-item.right .tl-year, .tl-item.left .tl-year { grid-column:1; text-align:left; padding:0; }
+            .tl-item::before { display:none; }
+            .gallery-grid { grid-template-columns:repeat(2,1fr); }
+            .g-1,.g-2,.g-3,.g-4,.g-5,.g-6 { grid-column:auto; grid-row:auto; }
+            .g-1 .g-art,.g-5 .g-art, .g-2 .g-art,.g-3 .g-art, .g-4 .g-art,.g-6 .g-art { padding-bottom:75%; }
+            .steps-grid { grid-template-columns:repeat(3,1fr); gap:40px; }
+            .steps-connector { display:none; }
+            .closing { grid-template-columns:1fr; gap:40px; }
+        }
+        @media (max-width:768px) {
+            nav { padding:20px 24px; }
+            nav.scrolled { padding:14px 24px; }
+            .nav-links { display:none !important; }
+            .hamburger { display:flex; }
+            .hero { padding:0 24px 80px; }
+            .scroll-hint { right:24px; }
+            .section { padding:80px 24px; }
+            .closing { padding:80px 24px; }
+            footer { padding:36px 24px; flex-direction:column; text-align:center; }
+            .f-links { flex-wrap:wrap; justify-content:center; }
+            .steps-grid { grid-template-columns:1fr 1fr; gap:32px; }
+            .gallery-grid { grid-template-columns:1fr; }
+            .hero-stamp { display:none; }
+        }
+        @media (max-width:480px) {
+            .steps-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Scroll progress indicator -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a>
+    <button class="mob-prod-toggle" onclick="toggleMobSub()">Produk ▾</button>
+    <div class="mob-submenu" id="mobSub">
+        <a href="teh pucuk.html" onclick="closeMenu()">🍃 Teh Pucuk</a>
+        <a href="es_teh.html" onclick="closeMenu()">🧊 Es Teh</a>
+        <a href="air_putih.html" onclick="closeMenu()">💧 Air Putih</a>
+        <a href="ultra_milk.html" onclick="closeMenu()">🥛 Ultra Milk</a>
+    </div>
+    <a href="informasi.html" onclick="closeMenu()">Informasi</a>
+    <a href="map.html" onclick="closeMenu()">Lokasi</a>
+    <a href="pembuat.html" onclick="closeMenu()">Pembuat</a>
+</div>
+
+<nav id="navbar">
+    <a href="index.html" class="logo">Es <em>Teh</em></a>
+    <ul class="nav-links">
+        <li><a href="index.html">Beranda</a></li>
+        <li class="nav-dropdown" id="navDropdown">
+            <a href="#" onclick="toggleDropdown(event)" class="active">
+                Produk <span class="dropdown-chevron"></span>
+            </a>
+            <div class="dropdown-menu">
+                <a href="teh_pucuk.html"><span class="d-icon">🍃</span> Teh Pucuk</a>
+                <div class="d-sep"></div>
+                <a href="es_teh.html"><span class="d-icon">🧊</span> Es Teh</a>
+                <div class="d-sep"></div>
+                <a href="air_putih.html"><span class="d-icon">💧</span> Air Putih</a>
+                <div class="d-sep"></div>
+                <a href="ultramilk.html"><span class="d-icon">🥛</span> Ultra Milk</a>
+            </div>
+        </li>
+        <li><a href="informasi.html">Informasi</a></li>
+        <li><a href="map.html">Lokasi</a></li>
+        <li><a href="pembuat.html">Pembuat</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="hero-bg-num">01</div>
+
+    <!-- Retro vintage rotating stamp -->
+    <svg class="hero-stamp" viewBox="0 0 140 140" fill="none">
+        <circle cx="70" cy="70" r="65" stroke="#8B5E3C" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <circle cx="70" cy="70" r="52" stroke="#D4A435" stroke-width="1"/>
+        <circle cx="70" cy="70" r="40" stroke="#8B5E3C" stroke-width="0.8"/>
+        <text font-family="'Cormorant Garamond', serif" font-size="8" fill="#8B5E3C" font-weight="600" letter-spacing="4">
+            <textPath href="#stampPath">· ES TEH NUSANTARA · TRADISI · ASLI ·</textPath>
+        </text>
+        <path id="stampPath" d="M70,10 A60,60 0 1,1 69.99,10" fill="none"/>
+        <text x="70" y="66" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="18" fill="#8B5E3C" font-weight="400" font-style="italic">Est.</text>
+        <text x="70" y="84" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="13" fill="#D4A435" font-weight="600" letter-spacing="2">1980</text>
+    </svg>
+
+    <!-- Retro geometric - tea cup rings / ice circles -->
+    <svg class="hero-geo" viewBox="0 0 340 340" fill="none">
+        <circle cx="170" cy="170" r="160" stroke="#D4A435" stroke-width="0.8" opacity="0.6"/>
+        <circle cx="170" cy="170" r="120" stroke="#8B5E3C" stroke-width="1"/>
+        <circle cx="170" cy="170" r="80"  stroke="#7AADBE" stroke-width="0.8" stroke-dasharray="3 4"/>
+        <circle cx="170" cy="170" r="40"  stroke="#D4A435" stroke-width="0.5" opacity="0.4"/>
+        <line x1="10"  y1="170" x2="330" y2="170" stroke="#8B5E3C" stroke-width="0.7" opacity="0.5"/>
+        <line x1="170" y1="10"  x2="170" y2="330" stroke="#8B5E3C" stroke-width="0.7" opacity="0.5"/>
+        <!-- Ice cube accent -->
+        <rect x="148" y="148" width="44" height="44" rx="6" stroke="#7AADBE" stroke-width="1.5" fill="none" opacity="0.7"/>
+        <line x1="162" y1="148" x2="158" y2="192" stroke="#7AADBE" stroke-width="0.8" opacity="0.4"/>
+    </svg>
+
+    <div class="hero-eyebrow">Halaman 01 — Pendahuluan</div>
+
+    <h1 class="hero-h1">
+        Mengenal<br>
+        <em>Lebih Dalam</em><br>
+        Es <span class="gold">Teh.</span>
+    </h1>
+
+    <p class="hero-desc">
+        Sejarah panjang, koleksi foto autentik, dan rahasia
+        pembuatan es teh yang menghadirkan cita rasa
+        terbaik dari alam Nusantara ke dalam gelas Anda.
+    </p>
+
+    <div class="hero-pills">
+        <a href="#sejarah" class="pill active-pill">⏱ Sejarah</a>
+        <a href="#gallery" class="pill">📷 Galeri</a>
+        <a href="#proses" class="pill">⚙ Cara Pembuatan</a>
+    </div>
+
+    <div class="scroll-hint">
+        <span>Gulir</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SEJARAH ── -->
+<section class="section" id="sejarah">
+    <div class="reveal">
+        <div class="retro-ornament"><span>Sejak Dulu Kala</span></div>
+        <div class="s-label">Sejarah Kami</div>
+        <h2 class="s-title">
+            Perjalanan<br>
+            <em>Panjang</em> Menuju<br>
+            <span class="g">Kesempurnaan</span>
+        </h2>
+        <p class="s-sub">
+            Dari warung pinggir jalan hingga jadi ikon budaya — es teh
+            adalah minuman yang menemani setiap momen rakyat Indonesia
+            selama berabad-abad.
+        </p>
+    </div>
+
+    <div class="timeline-wrap">
+
+        <div class="tl-item right reveal">
+            <div class="tl-year">1900</div>
+            <div class="tl-content">
+                <div class="tl-tag">— Awal Mula</div>
+                <div class="tl-heading">Warisan Kebun Teh</div>
+                <p class="tl-text">
+                    Tradisi minum teh di Nusantara berakar dari perkebunan
+                    teh kolonial di dataran tinggi Jawa dan Sumatera.
+                    Daun teh berkualitas tinggi diseduh oleh masyarakat
+                    lokal sebagai minuman sehari-hari penuh manfaat.
+                </p>
+                <div class="tl-badge">Tradisi Teh</div>
+            </div>
+        </div>
+
+        <div class="tl-item left reveal">
+            <div class="tl-content">
+                <div class="tl-tag">— Inovasi Lokal</div>
+                <div class="tl-heading">Lahirnya Es Teh</div>
+                <p class="tl-text">
+                    Di era pertengahan abad ke-20, penjual minuman kreatif
+                    mulai menuangkan teh pekat panas ke atas es batu.
+                    Hadirlah "es teh" — minuman segar yang langsung
+                    dicintai jutaan lidah Indonesia.
+                </p>
+                <div class="tl-badge">Inovasi 1950-an</div>
+            </div>
+            <div class="tl-year">1950</div>
+        </div>
+
+        <div class="tl-item right reveal">
+            <div class="tl-year">1980</div>
+            <div class="tl-content">
+                <div class="tl-tag">— Era Keemasan</div>
+                <div class="tl-heading">Warung Es Teh Legendaris</div>
+                <p class="tl-text">
+                    Tahun 80-an, warung es teh merebak di setiap sudut
+                    kota dan desa. Es teh manis menjadi teman setia
+                    nasi bungkus, gorengan, dan obrolan sore hari
+                    yang tak tergantikan.
+                </p>
+                <div class="tl-badge">Era Keemasan</div>
+            </div>
+        </div>
+
+        <div class="tl-item left reveal">
+            <div class="tl-content">
+                <div class="tl-tag">— Modernisasi</div>
+                <div class="tl-heading">Kafe & Kedai Kekinian</div>
+                <p class="tl-text">
+                    Generasi milenial dan Gen-Z membawa es teh ke
+                    level berikutnya: es teh susu, es teh tarik,
+                    brown sugar tea, hingga berbagai kreasi fusion
+                    yang tetap berakar pada cita rasa otentik teh asli.
+                </p>
+                <div class="tl-badge">7+ Varian</div>
+            </div>
+            <div class="tl-year">2010</div>
+        </div>
+
+        <div class="tl-item right reveal">
+            <div class="tl-year">Kini</div>
+            <div class="tl-content">
+                <div class="tl-tag">— Masa Kini</div>
+                <div class="tl-heading">Ikon Budaya Nusantara</div>
+                <p class="tl-text">
+                    Es teh telah menjadi bagian tak terpisahkan dari
+                    identitas kuliner Indonesia. Dari warung Rp3.000
+                    hingga kedai premium, ia tetap yang paling dicari
+                    dan paling mampu memadamkan haus.
+                </p>
+                <div class="tl-badge">Still #1</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── GALERI ── -->
+<section class="section gallery-section" id="gallery">
+    <div class="reveal">
+        <div class="retro-ornament"><span>Koleksi Visual</span></div>
+        <div class="s-label">Galeri Foto</div>
+        <h2 class="s-title">
+            Foto — <em>Foto</em><br>
+            Es Teh Kami
+        </h2>
+        <p class="s-sub">
+            Keindahan teh pilihan, balutan es batu segar, dan
+            momen-momen yang membuat setiap tegukan terasa istimewa.
+        </p>
+    </div>
+
+    <div class="gallery-grid reveal">
+
+        <!--
+        ╔══════════════════════════════════════════════════════╗
+        ║  TEMPLATE GAMBAR GALERI                              ║
+        ║  Ganti src="" dengan path foto Anda.                 ║
+        ║  Contoh: src="foto/es-teh-1.jpg"                    ║
+        ║  Placeholder otomatis tampil jika foto belum ada.   ║
+        ╚══════════════════════════════════════════════════════╝
+        -->
+
+        <!-- CARD 1 · Landscape Besar · Ideal: 1000×650px -->
+        <div class="g-card g-1">
+            <div class="g-art art-1">
+                <div class="g-art-inner">
+                    <img class="g-img" src="es teh.gif" alt="Es Teh dalam Gelas">
+                    <div class="g-placeholder">
+                        <div class="g-ph-icon">🧊</div>
+                        <div class="g-ph-size">1000 × 650 px</div>
+                        <div class="g-ph-hint">Landscape · ganti src</div>
+                    </div>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Es Teh Segar</div>
+                <div class="g-card-sub">Tinggi Dataran Indonesia</div>
+            </div>
+        </div>
+
+        <!-- CARD 2 · Portrait Medium · Ideal: 420×360px -->
+        <div class="g-card g-2">
+            <div class="g-art art-2">
+                <div class="g-art-inner">
+                    <img class="g-img" src="teh1.jpg" alt="Daun Teh Pilihan">
+                    <div class="g-placeholder">
+                        <div class="g-ph-icon">🍃</div>
+                        <div class="g-ph-size">420 × 360 px</div>
+                        <div class="g-ph-hint">Portrait · ganti src</div>
+                    </div>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Daun Teh Pilihan</div>
+                <div class="g-card-sub">Petik Segar Setiap Hari</div>
+            </div>
+        </div>
+
+        <!-- CARD 3 · Portrait Medium · Ideal: 520×445px · Ice-tinted -->
+        <div class="g-card g-3">
+            <div class="g-art art-3">
+                <div class="g-art-inner">
+                    <img class="g-img" src="teh2.jpg" alt="Es Batu Kristal">
+                    <div class="g-placeholder">
+                        <div class="g-ph-icon">❄️</div>
+                        <div class="g-ph-size">520 × 445 px</div>
+                        <div class="g-ph-hint">Portrait · ganti src</div>
+                    </div>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Es Batu Kristal</div>
+                <div class="g-card-sub">Kesegaran Tiada Tara</div>
+            </div>
+        </div>
+
+        <!-- CARD 4 · Portrait Kecil · Ideal: 380×325px -->
+        <div class="g-card g-4">
+            <div class="g-art art-4">
+                <div class="g-art-inner">
+                    <img class="g-img" src="teh3.jpg" alt="Proses Penyeduhan">
+                    <div class="g-placeholder">
+                        <div class="g-ph-icon">♨️</div>
+                        <div class="g-ph-size">380 × 325 px</div>
+                        <div class="g-ph-hint">Portrait · ganti src</div>
+                    </div>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Proses Seduh</div>
+                <div class="g-card-sub">Suhu & Waktu Optimal</div>
+            </div>
+        </div>
+
+        <!-- CARD 5 · Landscape Besar · Ideal: 1000×650px -->
+        <div class="g-card g-5">
+            <div class="g-art art-5">
+                <div class="g-art-inner">
+                    <img class="g-img" src="teh4.jpg" alt="Suguhan Es Teh">
+                    <div class="g-placeholder">
+                        <div class="g-ph-icon">🍹</div>
+                        <div class="g-ph-size">1000 × 650 px</div>
+                        <div class="g-ph-hint">Landscape · ganti src</div>
+                    </div>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Suguhan Istimewa</div>
+                <div class="g-card-sub">Momen Bersama</div>
+            </div>
+        </div>
+
+        <!-- CARD 6 · Portrait Medium · Ideal: 520×445px · Ice-tinted -->
+        <div class="g-card g-6">
+            <div class="g-art art-6">
+                <div class="g-art-inner">
+                    <img class="g-img" src="teh5.jpg" alt="Kebun Teh Nusantara">
+                    <div class="g-placeholder">
+                        <div class="g-ph-icon">🌿</div>
+                        <div class="g-ph-size">520 × 445 px</div>
+                        <div class="g-ph-hint">Portrait · ganti src</div>
+                    </div>
+                </div>
+            </div>
+            <div class="g-card-overlay">
+                <div class="g-card-title">Kebun Teh Nusantara</div>
+                <div class="g-card-sub">Sumber Terbaik</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── CARA PEMBUATAN ── -->
+<section class="section process-section" id="proses">
+    <div class="reveal">
+        <div class="retro-ornament"><span>Rahasia Racikan</span></div>
+        <div class="s-label">Cara Pembuatan</div>
+        <h2 class="s-title">
+            Dari <em>Daun</em><br>
+            ke <span class="g">Gelas Anda</span>
+        </h2>
+        <p class="s-sub">
+            Lima langkah sederhana namun penuh ketelitian — itulah
+            yang membuat segelas es teh terasa jauh lebih dari sekadar
+            minuman biasa.
+        </p>
+    </div>
+
+    <div class="steps-wrap">
+        <div class="steps-connector"></div>
+        <div class="steps-grid">
+
+            <div class="step reveal">
+                <div class="step-dot" data-n="01"><span class="step-icon">🌿</span></div>
+                <div class="step-title">Pilih Daun Teh</div>
+                <p class="step-desc">Hanya pucuk muda berkualitas yang dipilih — dua daun dan satu kuncup — dipetik di pagi hari saat embun masih menempel.</p>
+                <div class="step-tag">Petik Pagi</div>
+            </div>
+
+            <div class="step reveal d2">
+                <div class="step-dot" data-n="02"><span class="step-icon">💧</span></div>
+                <div class="step-title">Air Mendidih</div>
+                <p class="step-desc">Gunakan air bersih suhu 90–95°C. Jangan sampai mendidih penuh agar antioksidan dan aroma teh tidak rusak.</p>
+                <div class="step-tag">90–95°C</div>
+            </div>
+
+            <div class="step reveal d3">
+                <div class="step-dot" data-n="03"><span class="step-icon">⏱</span></div>
+                <div class="step-title">Seduh 3–5 Menit</div>
+                <p class="step-desc">Rendam kantong atau daun teh selama 3–5 menit. Pekatkan sesuai selera — semakin lama, semakin kuat aromanya.</p>
+                <div class="step-tag">Waktu Optimal</div>
+            </div>
+
+            <div class="step reveal d4">
+                <div class="step-dot" data-n="04"><span class="step-icon">🍬</span></div>
+                <div class="step-title">Manis Secukupnya</div>
+                <p class="step-desc">Tambahkan gula pasir atau gula batu saat teh masih panas agar larut sempurna. Aduk hingga merata dan biarkan sedikit hangat.</p>
+                <div class="step-tag">Rasa Seimbang</div>
+            </div>
+
+            <div class="step reveal d5">
+                <div class="step-dot" data-n="05"><span class="step-icon">🧊</span></div>
+                <div class="step-title">Tuang ke Es Batu</div>
+                <p class="step-desc">Tuang teh panas langsung ke gelas penuh es batu. Suara "kresss" es batu adalah tanda kesegaran sempurna siap dinikmati.</p>
+                <div class="step-tag">Segar Seketika</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ── CLOSING ── -->
+<section class="closing">
+    <div class="closing-quote reveal">
+        "Satu gelas es teh —<br>
+        sejuta <em>kenangan.</em><br>
+        Itulah <em>kekuatannya.</em>"
+    </div>
+    <div class="closing-right reveal">
+        <div class="closing-attr">— Filosofi Es Teh</div>
+        <p class="closing-body">
+            Es teh bukan sekadar minuman. Ia adalah teman makan siang,
+            penawar penat sore hari, dan pengikat silaturahmi.
+            Di setiap tegukan tersimpan kehangatan tradisi yang
+            telah diwariskan turun-temurun oleh masyarakat Nusantara.
+        </p>
+        <a href="informasi.html" class="btn btn-filled">
+            <span>Lihat Informasi Lengkap</span>
+            <span>→</span>
+        </a>
+    </div>
+</section>
+
+<footer>
+    <div class="f-logo">Es <em>Teh</em></div>
+    <div class="f-copy">© 2026 Es Teh Nusantara · Website Tugas Sekolah Kelompok Minuman XI-4</div>
+    <div class="f-links">
+        <a href="pendahuluan.html">Pendahuluan</a>
+        <a href="informasi.html">Informasi</a>
+        <a href="map.html">Lokasi</a>
+        <a href="infopembuat.html">Pembuat</a>
+    </div>
+</footer>
+
+<script>
+    // ── Desktop dropdown toggle
+    function toggleDropdown(e) {
+        e.preventDefault();
+        document.getElementById('navDropdown').classList.toggle('open');
+    }
+    document.addEventListener('click', (e) => {
+        const dd = document.getElementById('navDropdown');
+        if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
+
+    // ── Mobile submenu
+    function toggleMobSub() {
+        document.getElementById('mobSub').classList.toggle('open');
+    }
+
+    // ── Scroll progress bar
+    const prog = document.getElementById('scrollProgress');
+    function updateProgress() {
+        const scrolled = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        prog.style.transform = `scaleX(${scrolled / total})`;
+    }
+
+    // ── Navbar scroll
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+        updateProgress();
+    }, { passive: true });
+
+    // ── Hamburger
+    const hbg = document.getElementById('hamburger');
+    const mob = document.getElementById('mobileMenu');
+    function toggleMenu() {
+        hbg.classList.toggle('open');
+        mob.classList.toggle('open');
+        document.body.style.overflow = mob.classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMenu() {
+        hbg.classList.remove('open');
+        mob.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.07 });
+    reveals.forEach(el => obs.observe(el));
+
+    // ── Active pill on scroll
+    const sections = ['sejarah','gallery','proses'];
+    const pills = document.querySelectorAll('.pill');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 200) current = id;
+        });
+        pills.forEach(p => {
+            p.classList.remove('active-pill');
+            if (p.getAttribute('href') === '#' + current) p.classList.add('active-pill');
+        });
+    }, { passive: true });
+
+    // ── Gallery: handle broken/empty images → show placeholder
+    document.querySelectorAll('.g-img').forEach(img => {
+        img.addEventListener('error', function() {
+            this.classList.add('broken');
+        });
+        // Also check on load if src was set but empty
+        if (!img.src || img.src === window.location.href) {
+            img.classList.add('broken');
+        }
+    });
+
+    // ── Gallery: 3D tilt effect on mouse move (subtle, UX premium)
+    document.querySelectorAll('.g-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width  - 0.5;
+            const y = (e.clientY - rect.top)  / rect.height - 0.5;
+            card.style.transform = `perspective(800px) rotateY(${x * 7}deg) rotateX(${-y * 7}deg) scale(1.02)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)';
+        });
+    });
+</script>
+</body>
+</html>
