@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Produk — Minuman Nusantara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+    /* ─── VARIABLES (same project theme) ─── */
+    :root {
+        --bg:         #FAF6ED;
+        --bg-card:    #FFFDF7;
+        --bg-hover:   #F2EAD5;
+        --p-deep:     #2C1A0E;
+        --p-mid:      #7B4F2E;
+        --p-light:    #A67C52;
+        --heather:    #8B5E3C;
+        --heather-lt: #B07D52;
+        --sage:       #5A8C70;
+        --gold:       #D4A435;
+        --ice:        #7AADBE;
+        --ice-lt:     #C2DDE7;
+        --text:       #2C1A0E;
+        --text-mid:   #6B4226;
+        --text-dim:   #A07850;
+        --line:       rgba(139,94,60,.15);
+        --line-gold:  rgba(212,164,53,.2);
+        --es-teh:     #D4A435;
+        --ultra-milk: #1A5CB8;
+        --air-putih:  #3A9CC0;
+        --teh-pucuk:  #5A8C70;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Nunito', sans-serif;
+        font-weight: 300;
+        overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--heather); border-radius: 2px; }
+
+    /* ── SCROLL PROGRESS ── */
+    .scroll-progress {
+        position: fixed; top: 0; left: 0;
+        height: 3px; width: 100%;
+        background: linear-gradient(to right, var(--heather), var(--gold), var(--ice));
+        transform-origin: left; transform: scaleX(0);
+        z-index: 600; transition: transform .08s linear;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+        content: ''; position: fixed; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+        background-size: 200px 200px; opacity: 0.04; pointer-events: none; z-index: 9998;
+    }
+    body::after {
+        content: ''; position: fixed; inset: 0;
+        pointer-events: none; z-index: -1;
+        background-image: radial-gradient(rgba(139,94,60,.12) 1px, transparent 1px);
+        background-size: 22px 22px; opacity: 0.7;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+        position: fixed; inset: 0 0 auto 0; z-index: 500;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 28px 64px;
+        transition: padding .35s, background .35s, border-color .35s;
+        border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+        padding: 16px 64px;
+        background: rgba(250,246,237,.93);
+        backdrop-filter: blur(18px);
+        border-color: var(--line);
+    }
+    .logo {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px; font-weight: 600;
+        letter-spacing: 2px; text-decoration: none;
+        color: var(--text); text-transform: uppercase;
+    }
+    .logo em { font-style: italic; color: var(--heather); }
+    .nav-links { display: flex; gap: 42px; list-style: none; }
+    .nav-links a {
+        font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+        color: var(--text-mid); text-decoration: none;
+        position: relative; transition: color .3s; font-weight: 600;
+    }
+    .nav-links a::after {
+        content: ''; position: absolute;
+        bottom: -5px; left: 0; width: 0; height: 2px;
+        background: var(--heather); transition: width .3s;
+    }
+    .nav-links a:hover { color: var(--p-deep); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-links a.active { color: var(--heather); }
+
+    .hamburger {
+        display: none; flex-direction: column;
+        gap: 6px; cursor: pointer; padding: 4px;
+    }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); transition: all .3s; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,6px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-6px); }
+
+    .mobile-menu {
+        display: none; position: fixed; inset: 0; z-index: 499;
+        background: rgba(250,246,237,.98);
+        flex-direction: column; justify-content: center; align-items: center; gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 34px; font-weight: 400;
+        color: var(--text-mid); text-decoration: none;
+        letter-spacing: 2px; transition: color .3s;
+    }
+    .mobile-menu a:hover, .mobile-menu a.active { color: var(--heather); }
+
+    /* ═══════════════════════════════════════
+       EDITORIAL HERO — 2-COLUMN SPLIT
+    ═══════════════════════════════════════ */
+    .hero {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 56% 44%;
+        align-items: end;
+        padding: 120px 64px 100px;
+        position: relative; overflow: hidden;
+        isolation: isolate;
+    }
+    .orb {
+        position: absolute; border-radius: 50%;
+        pointer-events: none; filter: blur(90px); z-index: -1;
+    }
+    .orb-1 { width: 500px; height: 500px; top: -80px; right: -100px; background: radial-gradient(circle, rgba(212,164,53,.12) 0%, transparent 70%); }
+    .orb-2 { width: 380px; height: 380px; bottom: -60px; left: -60px; background: radial-gradient(circle, rgba(122,173,190,.12) 0%, transparent 70%); }
+
+    /* Rotating badge — repositioned for 2-col layout */
+    .hero-badge {
+        position: absolute; top: 120px; left: 64px;
+        width: 110px; height: 110px;
+        pointer-events: none; opacity: 0.16;
+        animation: spin 50s linear infinite;
+    }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* Left column: editorial content */
+    .hero-content {
+        position: relative; z-index: 1;
+        display: flex; flex-direction: column; justify-content: flex-end;
+        padding-bottom: 8px;
+    }
+    .hero-eyebrow {
+        font-size: 11px; letter-spacing: 4px; font-weight: 600;
+        text-transform: uppercase; color: var(--heather);
+        display: flex; align-items: center; gap: 16px; margin-bottom: 28px;
+        opacity: 0; animation: fadeUp .8s ease forwards .3s;
+    }
+    .hero-eyebrow::before { content: ''; display: block; width: 36px; height: 2px; background: var(--heather); }
+
+    .hero-h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(50px, 7.5vw, 104px);
+        font-weight: 400; line-height: 0.95;
+        letter-spacing: -2px; color: var(--p-deep);
+        opacity: 0; animation: fadeUp 1s ease forwards .5s;
+        margin-bottom: 28px;
+    }
+    .hero-h1 em { font-style: italic; color: var(--heather); }
+
+    .hero-desc {
+        font-size: 16px; color: var(--text-mid);
+        line-height: 1.7; max-width: 460px;
+        opacity: 0; animation: fadeUp 1s ease forwards .7s;
+        margin-bottom: 36px;
+    }
+
+    .hero-pills {
+        display: flex; gap: 10px; flex-wrap: wrap;
+        opacity: 0; animation: fadeUp 1s ease forwards .9s;
+    }
+    .pill {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 10px 20px;
+        border: 1.5px solid var(--line); border-radius: 50px;
+        font-size: 11px; letter-spacing: 2px; font-weight: 600;
+        text-transform: uppercase; color: var(--text-mid);
+        text-decoration: none; background: var(--bg-card);
+        transition: all .3s; cursor: pointer;
+    }
+    .pill:hover { border-color: var(--heather); color: var(--bg-card); background: var(--heather); }
+    .pill .pip { width: 7px; height: 7px; border-radius: 50%; background: currentColor; transition: background .3s; }
+
+    /* Right column: large artistic "04" */
+    .hero-deco {
+        position: relative; z-index: 1;
+        display: flex; flex-direction: column;
+        align-items: flex-end; justify-content: flex-end;
+        padding-bottom: 8px;
+        opacity: 0; animation: fadeIn 1.2s ease forwards 1s;
+    }
+    .hero-deco-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(130px, 20vw, 280px);
+        font-weight: 300; font-style: italic;
+        -webkit-text-stroke: 1.5px rgba(139,94,60,.22);
+        color: transparent;
+        line-height: 0.85; letter-spacing: -8px;
+        user-select: none; display: block; text-align: right;
+    }
+    .hero-deco-label {
+        font-size: 10px; letter-spacing: 4px; font-weight: 600;
+        text-transform: uppercase; color: var(--text-dim);
+        text-align: right; margin-top: 14px;
+    }
+    /* 4 product color swatches */
+    .hero-swatches {
+        display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;
+    }
+    .swatch {
+        width: 28px; height: 28px; border-radius: 50%;
+        transition: transform .3s, box-shadow .3s;
+        cursor: default;
+    }
+    .swatch:hover { transform: scale(1.25); box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+
+    /* Scroll hint */
+    .scroll-hint {
+        position: absolute; bottom: 36px; right: 64px;
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
+        opacity: 0; animation: fadeIn 1s ease forwards 1.4s;
+    }
+    .scroll-hint span {
+        font-size: 10px; font-weight: 600; letter-spacing: 3px;
+        text-transform: uppercase; color: var(--text-dim); writing-mode: vertical-rl;
+    }
+    .scroll-line {
+        width: 2px; height: 56px;
+        background: linear-gradient(to bottom, transparent, var(--heather));
+        animation: pulse 2s ease infinite;
+    }
+
+    /* ═══════════════════════════════════════
+       STICKY PRODUCT NAV STRIP
+    ═══════════════════════════════════════ */
+    .prod-nav {
+        position: sticky; top: 62px; z-index: 200;
+        background: rgba(250,246,237,.97);
+        backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--line);
+        border-top: 1px solid var(--line);
+        display: flex; justify-content: center; overflow: hidden;
+    }
+    .prod-nav-link {
+        display: flex; align-items: center; gap: 9px;
+        padding: 14px 36px;
+        font-size: 10px; letter-spacing: 2.5px; font-weight: 700;
+        text-transform: uppercase; color: var(--text-mid);
+        text-decoration: none;
+        border-right: 1px solid var(--line);
+        transition: all .3s; position: relative; overflow: hidden;
+    }
+    .prod-nav-link:last-child { border-right: none; }
+    .prod-nav-link::after {
+        content: ''; position: absolute;
+        bottom: 0; left: 0; right: 0; height: 2.5px;
+        background: var(--nc, var(--heather));
+        transform: scaleX(0); transform-origin: center;
+        transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .prod-nav-link:hover { background: var(--bg-hover); color: var(--p-deep); }
+    .prod-nav-link:hover::after,
+    .prod-nav-link.active::after { transform: scaleX(1); }
+    .prod-nav-dot {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: var(--nc, var(--heather)); flex-shrink: 0;
+        transition: transform .3s;
+    }
+    .prod-nav-link:hover .prod-nav-dot { transform: scale(1.4); }
+
+    /* ═══════════════════════════════════════
+       CHAPTER DESIGN — editorial book-style
+    ═══════════════════════════════════════ */
+    .chapter { margin-bottom: 0; border-top: 1px solid var(--line); }
+
+    /* Chapter opener band */
+    .chapter-opener {
+        display: grid;
+        grid-template-columns: 150px 1fr 300px;
+        gap: 48px; align-items: start;
+        padding: 72px 64px 60px;
+        background: var(--bg-card);
+        border-left: 5px solid var(--p-accent, var(--heather));
+        position: relative; overflow: hidden;
+    }
+    /* Faint large number watermark */
+    .chapter-opener::before {
+        content: attr(data-num);
+        position: absolute; right: -15px; top: 50%;
+        transform: translateY(-50%);
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(130px, 19vw, 280px);
+        font-weight: 300; font-style: italic;
+        color: rgba(139,94,60,.045); line-height: 1;
+        pointer-events: none; user-select: none;
+    }
+    /* Subtle product color tint wash */
+    .chapter-opener::after {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(100deg, rgba(var(--accent-rgb,.1), .05) 0%, transparent 55%);
+        pointer-events: none;
+    }
+
+    /* Big outlined chapter number */
+    .chapter-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(72px, 9vw, 128px);
+        font-weight: 300; font-style: italic;
+        line-height: 1; padding-top: 4px;
+        -webkit-text-stroke: 1.5px var(--p-accent, var(--heather));
+        color: transparent;
+        position: relative; z-index: 1;
+    }
+
+    /* Center: tag + name + pull quote */
+    .chapter-info { position: relative; z-index: 1; }
+    .chapter-tag {
+        display: inline-block; padding: 5px 14px;
+        border: 1.5px solid var(--p-accent, var(--gold));
+        border-radius: 2px;
+        font-size: 9px; letter-spacing: 3.5px; font-weight: 700;
+        text-transform: uppercase; color: var(--p-accent, var(--gold));
+        background: var(--bg-card); margin-bottom: 16px; position: relative;
+    }
+    .chapter-tag::before {
+        content: ''; position: absolute; inset: 3px;
+        border: 1px dashed rgba(139,94,60,.2); border-radius: 1px;
+    }
+    .chapter-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(44px, 6.5vw, 82px);
+        font-weight: 400; line-height: 0.93;
+        color: var(--p-deep); letter-spacing: -1.5px;
+        margin-bottom: 24px;
+    }
+    .chapter-name em { font-style: italic; color: var(--p-accent, var(--heather)); }
+
+    /* Pull-quote style tagline */
+    .chapter-quote {
+        display: flex; align-items: flex-start; gap: 10px;
+        padding-top: 20px; border-top: 1px solid var(--line);
+    }
+    .chapter-quote .q-mark {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 56px; line-height: 0.7;
+        color: var(--p-accent, var(--gold)); opacity: 0.45;
+        flex-shrink: 0; margin-top: 4px;
+    }
+    .chapter-quote p {
+        font-size: 14px; font-style: italic;
+        color: var(--text-mid); line-height: 1.65;
+    }
+
+    /* Right: quick-stat cards */
+    .chapter-stats {
+        display: flex; flex-direction: column; gap: 12px;
+        padding-top: 4px; position: relative; z-index: 1;
+    }
+    .chapter-stat {
+        padding: 14px 18px; background: var(--bg);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--p-accent, var(--heather));
+        border-radius: 0 6px 6px 0;
+        transition: background .3s;
+    }
+    .chapter-stat:hover { background: var(--bg-hover); }
+    .chapter-stat-label {
+        font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+        font-weight: 700; color: var(--text-dim); margin-bottom: 4px;
+    }
+    .chapter-stat-val {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 20px; font-weight: 600;
+        color: var(--p-deep); line-height: 1.1;
+    }
+
+    /* ─── CHAPTER BODY ─── */
+    .chapter-body {
+        display: grid;
+        grid-template-columns: 1fr .85fr;
+        gap: 64px; align-items: start;
+        padding: 64px 64px 80px;
+    }
+    .chapter-body.reverse { direction: rtl; }
+    .chapter-body.reverse > * { direction: ltr; }
+
+    /* Info intro with drop cap */
+    .info-intro {
+        font-size: 16px; line-height: 1.85;
+        color: var(--text-mid); margin-bottom: 40px;
+    }
+    .info-intro::first-letter {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 62px; font-weight: 600;
+        color: var(--p-accent, var(--heather));
+        float: left; line-height: 0.72;
+        margin: 8px 8px 0 0;
+    }
+
+    /* ── HORIZONTAL INFO STRIP ── */
+    .info-strip {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        background: var(--line); gap: 1px;
+        border: 1px solid var(--line); border-radius: 8px;
+        overflow: hidden; margin-bottom: 40px;
+    }
+    .info-strip-item {
+        background: var(--bg-card); padding: 18px 14px;
+        transition: background .3s;
+    }
+    .info-strip-item:hover { background: var(--bg-hover); }
+    .info-strip-label {
+        font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+        font-weight: 700; color: var(--text-dim); margin-bottom: 6px;
+    }
+    .info-strip-val {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 18px; font-weight: 600;
+        color: var(--p-deep); line-height: 1.2;
+    }
+    .info-strip-sub { font-size: 11px; color: var(--text-mid); margin-top: 3px; line-height: 1.4; }
+
+    /* ── SECTION SUB-HEADERS ── */
+    .section-sub {
+        display: flex; align-items: center; gap: 12px;
+        margin-bottom: 16px; margin-top: 4px;
+    }
+    .section-sub-label {
+        font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+        font-weight: 700; color: var(--heather); white-space: nowrap;
+    }
+    .section-sub-note {
+        font-size: 10px; color: var(--text-dim); white-space: nowrap;
+    }
+    .section-sub-line { flex: 1; height: 1px; background: var(--line); }
+
+    /* ── NUTRITION ROW ── */
+    .nutri-row {
+        display: grid; grid-template-columns: repeat(6, 1fr);
+        gap: 8px; margin-bottom: 40px;
+    }
+    .nutri-stat {
+        background: var(--bg-card);
+        border: 1px solid var(--line);
+        border-top: 2.5px solid var(--p-accent, var(--heather));
+        border-radius: 0 0 8px 8px;
+        padding: 14px 8px; text-align: center;
+        transition: all .3s; cursor: default;
+    }
+    .nutri-stat:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(44,26,14,.07); }
+    .nutri-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 26px; font-weight: 600;
+        color: var(--p-accent, var(--heather));
+        display: block; line-height: 1; margin-bottom: 2px;
+    }
+    .nutri-unit { font-size: 10px; color: var(--text-dim); margin-bottom: 4px; display: block; }
+    .nutri-name { font-size: 10px; color: var(--text-mid); letter-spacing: .4px; display: block; }
+
+    /* ── ADVANTAGES LIST ── */
+    .adv-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+    .adv-item {
+        display: flex; align-items: flex-start; gap: 14px;
+        padding: 13px 18px;
+        background: var(--bg-card); border: 1px solid var(--line);
+        border-left: 3px solid var(--p-accent, var(--heather));
+        border-radius: 0 6px 6px 0;
+        transition: all .3s;
+        font-size: 14px; color: var(--text-mid); line-height: 1.5;
+    }
+    .adv-item:hover { background: var(--bg-hover); transform: translateX(3px); }
+    .adv-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+    .adv-item strong { color: var(--p-deep); font-weight: 700; }
+
+    /* ── CTA ── */
+    .prod-cta {
+        display: inline-flex; align-items: center; gap: 10px;
+        margin-top: 32px; text-decoration: none;
+        font-size: 11px; letter-spacing: 2px; font-weight: 700;
+        text-transform: uppercase; color: var(--p-accent, var(--heather));
+        transition: all .3s; border-bottom: 1.5px solid; padding-bottom: 4px;
+    }
+    .prod-cta:hover { letter-spacing: 3px; }
+    .prod-cta svg { transition: transform .3s; }
+    .prod-cta:hover svg { transform: translate(4px,-4px); }
+
+    /* ─── IMAGE SIDE ─── */
+    .main-img-wrap {
+        position: relative; border-radius: 12px; overflow: hidden;
+        aspect-ratio: 4/3;
+        /* Artistic offset shadow in product accent color */
+        box-shadow: 8px 8px 0 var(--p-shadow, rgba(212,164,53,.25)), 0 16px 48px rgba(44,26,14,.12);
+        margin-bottom: 14px; background: var(--bg-hover);
+    }
+    .main-img-wrap img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform .6s ease; display: block;
+    }
+    .main-img-wrap:hover img { transform: scale(1.04); }
+    .main-img-label {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        padding: 36px 20px 18px;
+        background: linear-gradient(to top, rgba(44,26,14,.75), transparent);
+        color: #FFFDF7; font-size: 13px; font-weight: 600; letter-spacing: 1px;
+    }
+    .main-img-label small {
+        display: block; font-size: 10px; letter-spacing: 2px;
+        text-transform: uppercase; opacity: .75; margin-bottom: 4px;
+    }
+    .thumb-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .thumb-wrap {
+        border-radius: 8px; overflow: hidden; aspect-ratio: 1;
+        background: var(--bg-hover); cursor: pointer;
+        position: relative; border: 2px solid transparent;
+        transition: border-color .3s, transform .3s;
+    }
+    .thumb-wrap:hover { border-color: var(--p-accent, var(--gold)); transform: translateY(-3px); }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+    .thumb-wrap:hover img { transform: scale(1.08); }
+    .img-placeholder {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 8px;
+        background: var(--bg-hover); color: var(--text-dim);
+        font-size: 12px; text-align: center; padding: 12px;
+    }
+    .img-placeholder .ph-icon { font-size: 28px; opacity: .5; }
+    .img-placeholder span { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+
+    /* ─── CHAPTER SEPARATOR ─── */
+    .chapter-sep {
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--line-gold) 30%, var(--line-gold) 70%, transparent);
+    }
+
+    /* ═══════════════════════════════════════
+       COMPARE SECTION — 4-card visual grid
+    ═══════════════════════════════════════ */
+    .compare-section {
+        padding: 100px 64px;
+        background: var(--bg-card);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+    }
+    .s-label {
+        font-size: 11px; font-weight: 700; letter-spacing: 4px;
+        text-transform: uppercase; color: var(--heather);
+        display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
+    }
+    .s-label::before { content: ''; width: 30px; height: 2px; background: var(--heather); }
+    .s-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(36px, 5vw, 58px);
+        font-weight: 400; line-height: 1.1; color: var(--p-deep); margin-bottom: 16px;
+    }
+    .s-title em { font-style: italic; color: var(--heather); }
+    .retro-ornament {
+        display: flex; align-items: center; gap: 12px;
+        margin: 0 0 48px; opacity: .5;
+    }
+    .retro-ornament span {
+        font-size: 10px; letter-spacing: 4px; font-weight: 700;
+        text-transform: uppercase; color: var(--gold);
+    }
+    .retro-ornament::before, .retro-ornament::after {
+        content: ''; flex: 1; height: 1px;
+        background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    .compare-grid {
+        display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    .compare-card {
+        background: var(--bg); border: 1px solid var(--line);
+        border-radius: 14px; overflow: hidden;
+        display: flex; flex-direction: column;
+        transition: all .35s cubic-bezier(.4,0,.2,1);
+    }
+    .compare-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(44,26,14,.1);
+        border-color: var(--cc-color, var(--heather));
+    }
+    /* Thick top stripe in product color */
+    .cc-stripe { height: 5px; background: var(--cc-color, var(--heather)); }
+    .cc-head {
+        padding: 24px 22px 18px;
+        border-bottom: 1px solid var(--line);
+    }
+    .cc-product-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px; font-weight: 600;
+        color: var(--p-deep); line-height: 1.15; margin-bottom: 5px;
+    }
+    .cc-category {
+        font-size: 9.5px; letter-spacing: 2.5px; text-transform: uppercase;
+        color: var(--cc-color, var(--text-dim)); font-weight: 700;
+    }
+    .cc-body { padding: 16px 22px; flex: 1; display: flex; flex-direction: column; gap: 0; }
+    .cc-row {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 9px 0; border-bottom: 1px solid rgba(139,94,60,.06);
+    }
+    .cc-row:last-child { border-bottom: none; }
+    .cc-key {
+        font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+        font-weight: 700; color: var(--text-dim);
+    }
+    .cc-val {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 15px; font-weight: 600; color: var(--p-deep); text-align: right;
+        max-width: 55%;
+    }
+    .cc-footer {
+        padding: 14px 22px; background: var(--bg-hover);
+        font-size: 12px; color: var(--text-mid); line-height: 1.5;
+        border-top: 1px solid var(--line);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes pulse { 0%,100% { opacity:.3; transform:scaleY(.8); } 50% { opacity:1; transform:scaleY(1); } }
+
+    .reveal { opacity:0; transform:translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.d2 { transition-delay:.12s; } .reveal.d3 { transition-delay:.24s; }
+    .reveal.d4 { transition-delay:.36s; } .reveal.d5 { transition-delay:.48s; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ─── FOOTER ─── */
+    footer {
+        padding: 44px 64px; background: var(--p-deep); color: var(--bg-card);
+        display: flex; justify-content: space-between;
+        align-items: center; flex-wrap: wrap; gap: 20px;
+    }
+    .f-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 2px; }
+    .f-logo em { font-style: italic; color: var(--gold); }
+    .f-copy { font-size: 12px; color: rgba(255,255,255,.5); }
+    .f-links { display: flex; gap: 28px; flex-wrap: wrap; }
+    .f-links a {
+        font-size: 11px; font-weight: 600; letter-spacing: 2px;
+        text-transform: uppercase; color: rgba(255,255,255,.65);
+        text-decoration: none; transition: color .3s;
+    }
+    .f-links a:hover { color: var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1200px) {
+        .chapter-opener { grid-template-columns: 120px 1fr; }
+        .chapter-stats { display: none; }
+        .compare-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 1024px) {
+        .hero { grid-template-columns: 1fr; }
+        .hero-deco { display: none; }
+        .chapter-body { grid-template-columns: 1fr; gap: 40px; }
+        .chapter-body.reverse { direction: ltr; }
+        .info-strip { grid-template-columns: repeat(2,1fr); }
+        .nutri-row { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 768px) {
+        nav { padding: 20px 24px; } nav.scrolled { padding: 14px 24px; }
+        .nav-links { display: none; } .hamburger { display: flex; }
+        .hero { padding: 100px 24px 80px; }
+        .chapter-opener { padding: 40px 24px; gap: 20px; grid-template-columns: 90px 1fr; }
+        .chapter-body { padding: 40px 24px 56px; }
+        .compare-section { padding: 64px 24px; }
+        .compare-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+        .prod-nav-link { padding: 12px 14px; font-size: 9px; letter-spacing: 1.5px; }
+        footer { padding: 36px 24px; flex-direction: column; text-align: center; }
+        .f-links { justify-content: center; }
+        .scroll-hint { display: none; }
+    }
+    @media (max-width: 520px) {
+        .compare-grid { grid-template-columns: 1fr; }
+        .info-strip { grid-template-columns: 1fr 1fr; }
+        .nutri-row { grid-template-columns: repeat(3,1fr); }
+        .chapter-num { font-size: 56px; }
+    }
+    </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Beranda</a>
+    <a href="pendahuluan.html" onclick="closeMenu()">Pendahuluan</a>
+    <a href="informasi.html" onclick="closeMenu()" class="active">Informasi</a>
+    <a href="map.html" onclick="closeMenu()">Lokasi</a>
+    <a href="infopembuat.html" onclick="closeMenu()">Pembuat</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a href="index.html" class="logo">Es <em>Teh</em></a>
+    <ul class="nav-links">
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="pendahuluan.html">Pendahuluan</a></li>
+        <li><a href="informasi.html" class="active">Informasi</a></li>
+        <li><a href="map.html">Lokasi</a></li>
+        <li><a href="infopembuat.html">Pembuat</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- ═══════════ EDITORIAL HERO ═══════════ -->
+<section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Rotating stamp -->
+    <svg class="hero-badge" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="56" stroke="#D4A435" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <circle cx="60" cy="60" r="44" stroke="#8B5E3C" stroke-width="1"/>
+        <defs><path id="circle-path" d="M60,10 a50,50 0 1,1 -0.1,0"/></defs>
+        <text font-family="serif" font-size="9" fill="#D4A435" font-weight="600" letter-spacing="4">
+            <textPath href="#circle-path">MINUMAN NUSANTARA · INFO PRODUK · 2026 ·</textPath>
+        </text>
+    </svg>
+
+    <!-- LEFT: editorial text content -->
+    <div class="hero-content">
+        <div class="hero-eyebrow">Empat Minuman Pilihan</div>
+        <h1 class="hero-h1">Informasi <em>Lengkap</em><br>Produk Kami</h1>
+        <p class="hero-desc">
+            Sejarah, kandungan gizi, keunggulan, dan kisah di balik setiap tegukan — dari Es Teh hingga Teh Pucuk Harum.
+        </p>
+        <div class="hero-pills">
+            <a href="#es-teh" class="pill"><span class="pip" style="background:#D4A435"></span>Es Teh</a>
+            <a href="#ultra-milk" class="pill"><span class="pip" style="background:#1A5CB8"></span>Ultra Milk</a>
+            <a href="#air-putih" class="pill"><span class="pip" style="background:#3A9CC0"></span>Air Putih</a>
+            <a href="#teh-pucuk" class="pill"><span class="pip" style="background:#5A8C70"></span>Teh Pucuk</a>
+        </div>
+    </div>
+
+    <!-- RIGHT: large artistic "04" outlined text -->
+    <div class="hero-deco">
+        <span class="hero-deco-num">04</span>
+        <div class="hero-deco-label">Produk Pilihan Nusantara</div>
+        <div class="hero-swatches">
+            <div class="swatch" style="background:var(--es-teh)" title="Es Teh"></div>
+            <div class="swatch" style="background:var(--ultra-milk)" title="Ultra Milk"></div>
+            <div class="swatch" style="background:var(--air-putih)" title="Air Putih"></div>
+            <div class="swatch" style="background:var(--teh-pucuk)" title="Teh Pucuk"></div>
+        </div>
+    </div>
+
+    <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ═══════════ STICKY PRODUCT NAV ═══════════ -->
+<nav class="prod-nav" id="prodNav">
+    <a href="#es-teh" class="prod-nav-link" style="--nc:var(--es-teh)">
+        <span class="prod-nav-dot"></span>Es Teh
+    </a>
+    <a href="#ultra-milk" class="prod-nav-link" style="--nc:var(--ultra-milk)">
+        <span class="prod-nav-dot"></span>Ultra Milk
+    </a>
+    <a href="#air-putih" class="prod-nav-link" style="--nc:var(--air-putih)">
+        <span class="prod-nav-dot"></span>Air Putih
+    </a>
+    <a href="#teh-pucuk" class="prod-nav-link" style="--nc:var(--teh-pucuk)">
+        <span class="prod-nav-dot"></span>Teh Pucuk
+    </a>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 01 — ES TEH
+═══════════════════════════════════════════ -->
+<div id="es-teh" class="chapter" style="--p-accent:var(--es-teh); --p-shadow:rgba(212,164,53,.28);">
+
+    <div class="chapter-opener reveal" data-num="01">
+        <div class="chapter-num">01</div>
+        <div class="chapter-info">
+            <div class="chapter-tag">Minuman Tradisional</div>
+            <div class="chapter-name">Es <em>Teh</em><br>Indonesia</div>
+            <div class="chapter-quote">
+                <span class="q-mark">"</span>
+                <p>Minuman teh dingin paling ikonik di Indonesia — sederhana, menyegarkan, dan selalu ada di meja makan.</p>
+            </div>
+        </div>
+        <div class="chapter-stats">
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Kalori / sajian</div>
+                <div class="chapter-stat-val">5 kkal</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Kategori</div>
+                <div class="chapter-stat-val">RTD Teh</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Sejak</div>
+                <div class="chapter-stat-val">Abad 18</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-body reveal d2">
+        <!-- INFO SIDE -->
+        <div class="prod-info">
+            <p class="info-intro">
+                Es Teh adalah minuman khas Indonesia yang terbuat dari seduhan daun teh hitam berkualitas yang disajikan dingin dengan es batu. Minuman ini telah menjadi bagian tak terpisahkan dari budaya kuliner nusantara selama berabad-abad dan terus berkembang hingga menjadi merek modern yang digemari lintas generasi.
+            </p>
+
+            <div class="info-strip">
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Asal Usul</div>
+                    <div class="info-strip-val">Abad 18</div>
+                    <div class="info-strip-sub">Masuk via jalur perdagangan</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Bahan Baku</div>
+                    <div class="info-strip-val">Teh Hitam</div>
+                    <div class="info-strip-sub">Camellia sinensis pilihan</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Varian Rasa</div>
+                    <div class="info-strip-val">Original & Manis</div>
+                    <div class="info-strip-sub">Tawar, manis sedang, sangat manis</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Kategori</div>
+                    <div class="info-strip-val">RTD Teh</div>
+                    <div class="info-strip-sub">Ready-to-drink, panas & dingin</div>
+                </div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label">Kandungan Gizi</span>
+                <div class="section-sub-line"></div>
+                <span class="section-sub-note">per 250ml</span>
+            </div>
+            <div class="nutri-row">
+                <div class="nutri-stat"><span class="nutri-num">5</span><span class="nutri-unit">kkal</span><span class="nutri-name">Energi</span></div>
+                <div class="nutri-stat"><span class="nutri-num">0g</span><span class="nutri-unit">lemak</span><span class="nutri-name">Lemak Total</span></div>
+                <div class="nutri-stat"><span class="nutri-num">50mg</span><span class="nutri-unit">kafein</span><span class="nutri-name">Kafein</span></div>
+                <div class="nutri-stat"><span class="nutri-num">Tinggi</span><span class="nutri-unit">antioksidan</span><span class="nutri-name">Polifenol</span></div>
+                <div class="nutri-stat"><span class="nutri-num">0mg</span><span class="nutri-unit">pengawet</span><span class="nutri-name">Bebas Pengawet</span></div>
+                <div class="nutri-stat"><span class="nutri-num">1g</span><span class="nutri-unit">gula</span><span class="nutri-name">Gula (Tawar)</span></div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label">Keunggulan Produk</span>
+                <div class="section-sub-line"></div>
+            </div>
+            <ul class="adv-list">
+                <li class="adv-item"><span class="adv-icon">🍃</span><div><strong>Antioksidan Alami</strong> — Kandungan polifenol dari teh hitam membantu menangkal radikal bebas dan menjaga imun tubuh.</div></li>
+                <li class="adv-item"><span class="adv-icon">🧊</span><div><strong>Menyegarkan Instan</strong> — Sensasi dingin yang langsung terasa cocok diminum kapan saja, terutama di iklim tropis Indonesia.</div></li>
+                <li class="adv-item"><span class="adv-icon">💰</span><div><strong>Harga Merakyat</strong> — Dapat dinikmati semua kalangan, dari warung kaki lima hingga kedai premium.</div></li>
+                <li class="adv-item"><span class="adv-icon">🌿</span><div><strong>Kalori Rendah</strong> — Versi tawar es teh hampir nol kalori, cocok untuk gaya hidup sehat.</div></li>
+            </ul>
+
+            <a href="es_teh.html" class="prod-cta">
+                Lihat Halaman Lengkap
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </a>
+        </div>
+
+        <!-- IMAGE SIDE -->
+        <div class="prod-images">
+            <div class="main-img-wrap">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Ea_teh_manis.jpg/960px-Ea_teh_manis.jpg"
+                    alt="Es Teh Indonesia"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="img-placeholder" style="display:none"><div class="ph-icon">🧋</div><span>Foto Es Teh</span></div>
+                <div class="main-img-label"><small>Minuman Ikonik</small>Es Teh Manis Dingin</div>
+            </div>
+            <div class="thumb-row">
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Camellia_sinensis_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-025.jpg/440px-Camellia_sinensis_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-025.jpg"
+                        alt="Daun Teh" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🌿</div><span>Daun Teh</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Gelas-Teh-Tarik.jpg/440px-Gelas-Teh-Tarik.jpg"
+                        alt="Penyeduhan" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">☕</div><span>Penyeduhan</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Tea_Estates_in_Darjeeling.jpg/440px-Tea_Estates_in_darjeeling.jpg"
+                        alt="Kebun Teh" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🏔️</div><span>Kebun Teh</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /es-teh -->
+<div class="chapter-sep"></div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 02 — ULTRA MILK
+═══════════════════════════════════════════ -->
+<div id="ultra-milk" class="chapter" style="--p-accent:var(--ultra-milk); --p-shadow:rgba(26,92,184,.18);">
+
+    <div class="chapter-opener reveal" data-num="02">
+        <div class="chapter-num" style="-webkit-text-stroke-color:var(--ultra-milk);">02</div>
+        <div class="chapter-info">
+            <div class="chapter-tag" style="border-color:var(--ultra-milk);color:var(--ultra-milk);">Susu UHT Pertama · Indonesia</div>
+            <div class="chapter-name">Ultra <em style="color:var(--ultra-milk)">Milk</em></div>
+            <div class="chapter-quote">
+                <span class="q-mark" style="color:var(--ultra-milk)">"</span>
+                <p>Pionir susu UHT di Asia Tenggara sejak 1975 — menuangkan kebaikan nutrisi alami untuk keluarga Indonesia.</p>
+            </div>
+        </div>
+        <div class="chapter-stats">
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Kalori / sajian</div>
+                <div class="chapter-stat-val">130 kkal</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Berdiri</div>
+                <div class="chapter-stat-val">1975</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Teknologi</div>
+                <div class="chapter-stat-val">UHT + Aseptik</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-body reverse reveal d2">
+        <!-- IMAGE SIDE (left via reverse) -->
+        <div class="prod-images">
+            <div class="main-img-wrap">
+                <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/01-1-full-cream.jpg"
+                    alt="Ultra Milk Full Cream"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="img-placeholder" style="display:none"><div class="ph-icon">🥛</div><span>Foto Ultra Milk</span></div>
+                <div class="main-img-label"><small>Produk Unggulan</small>Ultra Milk Full Cream 1L</div>
+            </div>
+            <div class="thumb-row">
+                <div class="thumb-wrap">
+                    <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/01-2-cokelat.jpg"
+                        alt="Ultra Milk Cokelat" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🍫</div><span>Varian Cokelat</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/01-5-stroberi.jpg"
+                        alt="Ultra Milk Stroberi" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🍓</div><span>Varian Stroberi</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://gahemo.com/wp-content/uploads/img-product/ultra-milk/02-1-plain-250-ml.jpg"
+                        alt="Ultra Milk Low Fat" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">💪</div><span>Low Fat</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO SIDE -->
+        <div class="prod-info">
+            <p class="info-intro" style="--p-accent:var(--ultra-milk)">
+                PT Ultrajaya Milk Industry & Trading Company Tbk memperkenalkan teknologi UHT (Ultra High Temperature) dan pengemasan aseptik Tetra Pak pertama kali di Asia Tenggara pada tahun 1975. Sejak saat itu, brand Ultra Milk telah menjadi pemimpin pasar susu cair siap minum di Indonesia.
+            </p>
+
+            <div class="info-strip">
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Berdiri</div>
+                    <div class="info-strip-val">1975</div>
+                    <div class="info-strip-sub">Pionir UHT di Asia Tenggara</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Pendiri</div>
+                    <div class="info-strip-val">Ahmad Prawirawidjaja</div>
+                    <div class="info-strip-sub">Usaha keluarga Bandung, 1958</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Teknologi</div>
+                    <div class="info-strip-val">UHT + Aseptik</div>
+                    <div class="info-strip-sub">135°C–140°C selama 2–4 detik</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Ketahanan</div>
+                    <div class="info-strip-val">10 Bulan</div>
+                    <div class="info-strip-sub">Tanpa bahan pengawet</div>
+                </div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label" style="color:var(--ultra-milk)">Kandungan Gizi</span>
+                <div class="section-sub-line"></div>
+                <span class="section-sub-note">per 200ml Full Cream</span>
+            </div>
+            <div class="nutri-row" style="--p-accent:var(--ultra-milk)">
+                <div class="nutri-stat"><span class="nutri-num">130</span><span class="nutri-unit">kkal</span><span class="nutri-name">Energi</span></div>
+                <div class="nutri-stat"><span class="nutri-num">7g</span><span class="nutri-unit">lemak</span><span class="nutri-name">Lemak Total</span></div>
+                <div class="nutri-stat"><span class="nutri-num">6g</span><span class="nutri-unit">protein</span><span class="nutri-name">Protein</span></div>
+                <div class="nutri-stat"><span class="nutri-num">200mg</span><span class="nutri-unit">kalsium</span><span class="nutri-name">Kalsium</span></div>
+                <div class="nutri-stat"><span class="nutri-num">Vit D</span><span class="nutri-unit">+ A,B2,B12</span><span class="nutri-name">Vitamin</span></div>
+                <div class="nutri-stat"><span class="nutri-num">9g</span><span class="nutri-unit">karbohidrat</span><span class="nutri-name">Gula Susu</span></div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label" style="color:var(--ultra-milk)">Keunggulan Produk</span>
+                <div class="section-sub-line"></div>
+            </div>
+            <ul class="adv-list" style="--p-accent:var(--ultra-milk)">
+                <li class="adv-item"><span class="adv-icon">🏭</span><div><strong>Teknologi UHT</strong> — Dipanaskan 135°C–140°C dalam 2–4 detik; membunuh bakteri tanpa merusak nutrisi alami susu.</div></li>
+                <li class="adv-item"><span class="adv-icon">📦</span><div><strong>Kemasan Aseptik 6 Lapis</strong> — Melindungi susu dari UV, udara, dan bakteri luar sehingga tahan hingga 10 bulan.</div></li>
+                <li class="adv-item"><span class="adv-icon">🥛</span><div><strong>Sumber Kalsium Tinggi</strong> — Mendukung pertumbuhan tulang dan gigi anak serta menjaga kepadatan tulang orang dewasa.</div></li>
+                <li class="adv-item"><span class="adv-icon">🌾</span><div><strong>Tanpa Pengawet</strong> — Ketahanan berasal dari proses sterilisasi, bukan bahan kimia tambahan.</div></li>
+            </ul>
+
+            <a href="ultra_milk.html" class="prod-cta" style="color:var(--ultra-milk); border-color:var(--ultra-milk);">
+                Lihat Halaman Lengkap
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </a>
+        </div>
+    </div>
+
+</div><!-- /ultra-milk -->
+<div class="chapter-sep"></div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 03 — AIR PUTIH
+═══════════════════════════════════════════ -->
+<div id="air-putih" class="chapter" style="--p-accent:var(--air-putih); --p-shadow:rgba(58,156,192,.22);">
+
+    <div class="chapter-opener reveal" data-num="03">
+        <div class="chapter-num" style="-webkit-text-stroke-color:var(--air-putih);">03</div>
+        <div class="chapter-info">
+            <div class="chapter-tag" style="border-color:var(--air-putih);color:var(--air-putih);">Sumber Kehidupan</div>
+            <div class="chapter-name">Air <em style="color:var(--air-putih)">Putih</em><br>Murni</div>
+            <div class="chapter-quote">
+                <span class="q-mark" style="color:var(--air-putih)">"</span>
+                <p>70% tubuh kita adalah air. Memilih sumber air yang tepat adalah fondasi kesehatan.</p>
+            </div>
+        </div>
+        <div class="chapter-stats">
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Kalori</div>
+                <div class="chapter-stat-val">0 kkal</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">pH Ideal</div>
+                <div class="chapter-stat-val">7.0 – 7.5</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Standar</div>
+                <div class="chapter-stat-val">SNI 01-3553</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-body reveal d2">
+        <div class="prod-info">
+            <p class="info-intro" style="--p-accent:var(--air-putih)">
+                Air putih adalah minuman paling esensial dan paling sering dilupakan pentingnya. Sebagai Air Minum Dalam Kemasan (AMDK), air putih yang baik berasal dari sumber mata air pegunungan alami yang kemudian melalui proses filtrasi berlapis untuk memastikan kemurnian, kejernihan, dan keamanannya sebelum sampai ke konsumen.
+            </p>
+
+            <div class="info-strip">
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Sumber</div>
+                    <div class="info-strip-val">Mata Air Alam</div>
+                    <div class="info-strip-sub">Pegunungan Jawa & Sumatra</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">pH</div>
+                    <div class="info-strip-val">7.0 – 7.5</div>
+                    <div class="info-strip-sub">Netral hingga sedikit basa</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">TDS</div>
+                    <div class="info-strip-val">&lt; 50 ppm</div>
+                    <div class="info-strip-sub">Total Dissolved Solids sangat rendah</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Standar</div>
+                    <div class="info-strip-val">SNI 01-3553</div>
+                    <div class="info-strip-sub">Badan Standardisasi Nasional</div>
+                </div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label" style="color:var(--air-putih)">Mineral Alami</span>
+                <div class="section-sub-line"></div>
+                <span class="section-sub-note">per 500ml</span>
+            </div>
+            <div class="nutri-row" style="--p-accent:var(--air-putih)">
+                <div class="nutri-stat"><span class="nutri-num">0</span><span class="nutri-unit">kkal</span><span class="nutri-name">Kalori</span></div>
+                <div class="nutri-stat"><span class="nutri-num">~5mg</span><span class="nutri-unit">kalsium</span><span class="nutri-name">Ca²⁺</span></div>
+                <div class="nutri-stat"><span class="nutri-num">~2mg</span><span class="nutri-unit">magnesium</span><span class="nutri-name">Mg²⁺</span></div>
+                <div class="nutri-stat"><span class="nutri-num">~10mg</span><span class="nutri-unit">natrium</span><span class="nutri-name">Na⁺</span></div>
+                <div class="nutri-stat"><span class="nutri-num">0g</span><span class="nutri-unit">gula</span><span class="nutri-name">Gula</span></div>
+                <div class="nutri-stat"><span class="nutri-num">0mg</span><span class="nutri-unit">kafein</span><span class="nutri-name">Kafein</span></div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label" style="color:var(--air-putih)">Manfaat & Keunggulan</span>
+                <div class="section-sub-line"></div>
+            </div>
+            <ul class="adv-list" style="--p-accent:var(--air-putih)">
+                <li class="adv-item"><span class="adv-icon">💧</span><div><strong>Hidrasi Optimal</strong> — Menjaga keseimbangan cairan tubuh, vital untuk fungsi ginjal, jantung, dan otak.</div></li>
+                <li class="adv-item"><span class="adv-icon">🧬</span><div><strong>Detoksifikasi Alami</strong> — Membantu membuang racun melalui urin dan keringat secara efisien.</div></li>
+                <li class="adv-item"><span class="adv-icon">⚖️</span><div><strong>Mendukung Metabolisme</strong> — Minum 8 gelas per hari terbukti meningkatkan laju metabolisme basal.</div></li>
+                <li class="adv-item"><span class="adv-icon">🫀</span><div><strong>Menjaga Elastisitas Kulit</strong> — Asupan air cukup membuat kulit lebih lembap, kenyal, dan bercahaya.</div></li>
+            </ul>
+
+            <a href="air_putih.html" class="prod-cta" style="color:var(--air-putih); border-color:var(--air-putih);">
+                Lihat Halaman Lengkap
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H7M13 3V9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </a>
+        </div>
+
+        <!-- IMAGE SIDE -->
+        <div class="prod-images">
+            <div class="main-img-wrap">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Clear_Water_Stream_on_Slate.jpg/960px-Clear_Water_Stream_on_Slate.jpg"
+                    alt="Air Putih Jernih"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="img-placeholder" style="display:none"><div class="ph-icon">💧</div><span>Foto Mata Air</span></div>
+                <div class="main-img-label"><small>Kemurnian Alam</small>Sumber Air Pegunungan Alami</div>
+            </div>
+            <div class="thumb-row">
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/280px-PNG_transparency_demonstration_1.png"
+                        alt="Air dalam gelas" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🫙</div><span>Air Bersih</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Waterfall_in_Monteverde%2C_Costa_Rica.jpg/440px-Waterfall_in_Monteverde%2C_Costa_Rica.jpg"
+                        alt="Air Terjun" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🌊</div><span>Air Terjun</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/440px-No-Image-Placeholder.svg.png"
+                        alt="Proses Filtrasi" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:flex"><div class="ph-icon">🔬</div><span>Proses Filtrasi</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /air-putih -->
+<div class="chapter-sep"></div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 04 — TEH PUCUK HARUM
+═══════════════════════════════════════════ -->
+<div id="teh-pucuk" class="chapter" style="--p-accent:var(--teh-pucuk); --p-shadow:rgba(90,140,112,.25);">
+
+    <div class="chapter-opener reveal" data-num="04">
+        <div class="chapter-num" style="-webkit-text-stroke-color:var(--teh-pucuk);">04</div>
+        <div class="chapter-info">
+            <div class="chapter-tag" style="border-color:var(--teh-pucuk);color:var(--teh-pucuk);">Teh Botol Premium · Segera Hadir</div>
+            <div class="chapter-name">Teh <em style="color:var(--teh-pucuk)">Pucuk</em><br>Harum</div>
+            <div class="chapter-quote">
+                <span class="q-mark" style="color:var(--teh-pucuk)">"</span>
+                <p>Hanya daun pucuk termuda yang dipetik — menghadirkan aroma terbaik yang tidak pernah basi.</p>
+            </div>
+        </div>
+        <div class="chapter-stats">
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Kalori / sajian</div>
+                <div class="chapter-stat-val">70 kkal</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Diluncurkan</div>
+                <div class="chapter-stat-val">2011</div>
+            </div>
+            <div class="chapter-stat">
+                <div class="chapter-stat-label">Varian</div>
+                <div class="chapter-stat-val">5+ Rasa</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chapter-body reverse reveal d2">
+        <!-- IMAGE SIDE (left via reverse) -->
+        <div class="prod-images">
+            <div class="main-img-wrap">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Tea_buds_Camellia_sinensis.jpg/960px-Tea_buds_Camellia_sinensis.jpg"
+                    alt="Daun Pucuk Teh"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="img-placeholder" style="display:none"><div class="ph-icon">🍃</div><span>Foto Teh Pucuk</span></div>
+                <div class="main-img-label"><small>Pucuk Termuda</small>Daun Pucuk Camellia sinensis</div>
+            </div>
+            <div class="thumb-row">
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Tea_pickers_Sri_Lanka_1.jpg/440px-Tea_pickers_Sri_Lanka_1.jpg"
+                        alt="Petik Pucuk" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">👐</div><span>Pemetikan</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Nilgiri_tea_estate.jpg/440px-Nilgiri_tea_estate.jpg"
+                        alt="Perkebunan Teh" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🏡</div><span>Perkebunan</span></div>
+                </div>
+                <div class="thumb-wrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Gelas-Teh-Tarik.jpg/440px-Gelas-Teh-Tarik.jpg"
+                        alt="Teh Harum" onerror="this.style.display='none'; this.parentElement.querySelector('.img-placeholder').style.display='flex'">
+                    <div class="img-placeholder" style="display:none"><div class="ph-icon">🍵</div><span>Teh Harum</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO SIDE -->
+        <div class="prod-info">
+            <p class="info-intro" style="--p-accent:var(--teh-pucuk)">
+                Teh Pucuk Harum adalah minuman teh dalam kemasan produksi PT Mayora Indah Tbk. yang menggunakan teknologi pemetikan pucuk daun teh termuda (dua daun pucuk dan satu kuntum) untuk menghasilkan cita rasa teh yang paling segar dan harum. Dipasarkan sejak 2011, produk ini menjadi salah satu RTD Tea terlaris di Indonesia.
+            </p>
+
+            <div class="info-strip">
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Produsen</div>
+                    <div class="info-strip-val">PT Mayora Indah</div>
+                    <div class="info-strip-sub">Diluncurkan sejak 2011</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Teknik Panen</div>
+                    <div class="info-strip-val">Petik Pucuk</div>
+                    <div class="info-strip-sub">Hanya 2 daun + 1 kuntum teratas</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Varian</div>
+                    <div class="info-strip-val">5+ Rasa</div>
+                    <div class="info-strip-sub">Original, Jasmine, Leci, Madu, Less Sugar</div>
+                </div>
+                <div class="info-strip-item">
+                    <div class="info-strip-label">Kemasan</div>
+                    <div class="info-strip-val">350ml & 1L</div>
+                    <div class="info-strip-sub">PET Bottle, tahan 12 bulan</div>
+                </div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label" style="color:var(--teh-pucuk)">Kandungan Gizi</span>
+                <div class="section-sub-line"></div>
+                <span class="section-sub-note">per 350ml Original</span>
+            </div>
+            <div class="nutri-row" style="--p-accent:var(--teh-pucuk)">
+                <div class="nutri-stat"><span class="nutri-num">70</span><span class="nutri-unit">kkal</span><span class="nutri-name">Energi</span></div>
+                <div class="nutri-stat"><span class="nutri-num">17g</span><span class="nutri-unit">gula</span><span class="nutri-name">Total Gula</span></div>
+                <div class="nutri-stat"><span class="nutri-num">0g</span><span class="nutri-unit">lemak</span><span class="nutri-name">Lemak</span></div>
+                <div class="nutri-stat"><span class="nutri-num">Tinggi</span><span class="nutri-unit">antioksidan</span><span class="nutri-name">Katekin</span></div>
+                <div class="nutri-stat"><span class="nutri-num">~30mg</span><span class="nutri-unit">kafein</span><span class="nutri-name">Kafein</span></div>
+                <div class="nutri-stat"><span class="nutri-num">0mg</span><span class="nutri-unit">penyedap</span><span class="nutri-name">MSG/Penyedap</span></div>
+            </div>
+
+            <div class="section-sub">
+                <span class="section-sub-label" style="color:var(--teh-pucuk)">Keunggulan Produk</span>
+                <div class="section-sub-line"></div>
+            </div>
+            <ul class="adv-list" style="--p-accent:var(--teh-pucuk)">
+                <li class="adv-item"><span class="adv-icon">🌱</span><div><strong>Pucuk Terbaik</strong> — Hanya daun pucuk termuda yang dipilih, menghasilkan aroma teh paling kaya dan segar.</div></li>
+                <li class="adv-item"><span class="adv-icon">🏺</span><div><strong>Teknologi Sterilisasi Canggih</strong> — Proses bottling aseptik menjaga kesegaran teh tanpa bahan pengawet tambahan.</div></li>
+                <li class="adv-item"><span class="adv-icon">🍃</span><div><strong>Katekin Alami</strong> — Antioksidan katekin dari pucuk teh membantu melindungi sel tubuh dari kerusakan oksidatif.</div></li>
+                <li class="adv-item"><span class="adv-icon">🌸</span><div><strong>Aroma Bunga Jasmine</strong> — Varian jasmine menggunakan bunga melati asli, bukan perisa sintetis.</div></li>
+            </ul>
+
+            <!-- Coming soon notice -->
+            <div style="margin-top:32px; padding:18px 22px; background:var(--bg-card); border:1.5px dashed rgba(90,140,112,.3); border-radius:8px;">
+                <div style="font-size:10px; letter-spacing:3px; text-transform:uppercase; font-weight:700; color:var(--teh-pucuk); margin-bottom:8px;">🚧 Halaman dalam Pengembangan</div>
+                <p style="font-size:14px; color:var(--text-mid); line-height:1.6;">Halaman lengkap Teh Pucuk Harum sedang kami siapkan. Nantikan informasi lebih lengkap tentang produk ini!</p>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /teh-pucuk -->
+
+<!-- ═══════════════════════════════════════════
+     COMPARE SECTION — Visual Card Grid
+═══════════════════════════════════════════ -->
+<div class="compare-section">
+    <div class="s-label reveal">Perbandingan</div>
+    <h2 class="s-title reveal d2">Keempat Produk <em>Sekilas</em></h2>
+    <div class="retro-ornament reveal d3"><span>Komparasi</span></div>
+
+    <div class="compare-grid reveal d3">
+
+        <div class="compare-card" style="--cc-color:var(--es-teh)">
+            <div class="cc-stripe"></div>
+            <div class="cc-head">
+                <div class="cc-product-name">Es Teh Indonesia</div>
+                <div class="cc-category">RTD Tea</div>
+            </div>
+            <div class="cc-body">
+                <div class="cc-row"><span class="cc-key">Kalori</span><span class="cc-val">5 kkal</span></div>
+                <div class="cc-row"><span class="cc-key">Keunggulan</span><span class="cc-val">Antioksidan, menyegarkan</span></div>
+                <div class="cc-row"><span class="cc-key">Diproduksi</span><span class="cc-val">Abad 18 (modern: 2016)</span></div>
+            </div>
+            <div class="cc-footer">Cocok untuk aktivitas harian & diet</div>
+        </div>
+
+        <div class="compare-card" style="--cc-color:var(--ultra-milk)">
+            <div class="cc-stripe"></div>
+            <div class="cc-head">
+                <div class="cc-product-name">Ultra Milk</div>
+                <div class="cc-category">Susu UHT</div>
+            </div>
+            <div class="cc-body">
+                <div class="cc-row"><span class="cc-key">Kalori</span><span class="cc-val">130 kkal</span></div>
+                <div class="cc-row"><span class="cc-key">Keunggulan</span><span class="cc-val">Kalsium, protein</span></div>
+                <div class="cc-row"><span class="cc-key">Diproduksi</span><span class="cc-val">1975</span></div>
+            </div>
+            <div class="cc-footer">Cocok untuk anak-anak, olahraga & pertumbuhan</div>
+        </div>
+
+        <div class="compare-card" style="--cc-color:var(--air-putih)">
+            <div class="cc-stripe"></div>
+            <div class="cc-head">
+                <div class="cc-product-name">Air Putih</div>
+                <div class="cc-category">AMDK</div>
+            </div>
+            <div class="cc-body">
+                <div class="cc-row"><span class="cc-key">Kalori</span><span class="cc-val">0 kkal</span></div>
+                <div class="cc-row"><span class="cc-key">Keunggulan</span><span class="cc-val">Hidrasi murni, detoks</span></div>
+                <div class="cc-row"><span class="cc-key">Diproduksi</span><span class="cc-val">Ribuan tahun (~1970)</span></div>
+            </div>
+            <div class="cc-footer">Cocok untuk semua kondisi, sehari-hari</div>
+        </div>
+
+        <div class="compare-card" style="--cc-color:var(--teh-pucuk)">
+            <div class="cc-stripe"></div>
+            <div class="cc-head">
+                <div class="cc-product-name">Teh Pucuk Harum</div>
+                <div class="cc-category">RTD Tea</div>
+            </div>
+            <div class="cc-body">
+                <div class="cc-row"><span class="cc-key">Kalori</span><span class="cc-val">70 kkal</span></div>
+                <div class="cc-row"><span class="cc-key">Keunggulan</span><span class="cc-val">Pucuk terbaik, katekin</span></div>
+                <div class="cc-row"><span class="cc-key">Diproduksi</span><span class="cc-val">2011</span></div>
+            </div>
+            <div class="cc-footer">Cocok untuk on-the-go & pelengkap makan</div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="f-logo">Es <em>Teh</em></div>
+    <div class="f-copy">© 2026 Es Teh Nusantara · Website Tugas Sekolah Kelompok Minuman XI-4</div>
+    <div class="f-links">
+        <a href="pendahuluan.html">Pendahuluan</a>
+        <a href="informasi.html">Informasi</a>
+        <a href="map.html">Lokasi</a>
+        <a href="infopembuat.html">Pembuat</a>
+    </div>
+</footer>
+
+<script>
+    // ── Navbar scroll
+    const nav = document.getElementById('navbar');
+    const prog = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 60);
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (prog) prog.style.transform = `scaleX(${window.scrollY / total})`;
+    }, { passive: true });
+
+    // ── Hamburger
+    function toggleMenu() {
+        document.getElementById('hamburger').classList.toggle('open');
+        document.getElementById('mobileMenu').classList.toggle('open');
+        document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMenu() {
+        document.getElementById('hamburger').classList.remove('open');
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // ── Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.06 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ── Active prod-nav highlight on scroll
+    const chapters = ['es-teh','ultra-milk','air-putih','teh-pucuk'];
+    const navLinks = document.querySelectorAll('.prod-nav-link');
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+                });
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    chapters.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) scrollObserver.observe(el);
+    });
+
+    // ── Smooth scroll for all anchor links (offset for fixed nav)
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                window.scrollTo({ top: target.offsetTop - 110, behavior: 'smooth' });
+            }
+        });
+    });
+
+    // ── Thumbnail click → update main image
+    document.querySelectorAll('.thumb-wrap').forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            const img = thumb.querySelector('img');
+            if (!img || img.style.display === 'none') return;
+            const mainWrap = thumb.closest('.prod-images').querySelector('.main-img-wrap');
+            const mainImg = mainWrap.querySelector('img');
+            if (mainImg && img.src) {
+                mainImg.style.opacity = '0';
+                mainImg.style.transition = 'opacity .3s';
+                setTimeout(() => { mainImg.src = img.src; mainImg.style.opacity = '1'; }, 200);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
